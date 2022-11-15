@@ -1,0 +1,41 @@
+.loading-spinner-grid {
+  display: grid;
+
+  justify-items: center;
+  align-items: center;
+
+  width: fit-content;
+
+  margin: auto;
+}
+
+.loading-spinner-grid > * {
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.loading-spinner-grid:first-child {
+  user-select: none;
+  text-shadow: 2px 2px 4px #BBB;
+  color: slategrey;
+  font-weight: bold;
+}
+
+.loading-spinner {
+  width: 128px;
+  height: 128px;
+
+  border-radius: 64px;
+  border-top-style: solid;
+  border-top-color: slategrey;
+
+  animation-name: rotate-animation;
+  animation-duration: 2.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rotate-animation {
+  0% {transform: rotate(0deg)}
+  100% {transform: rotate(360deg)}
+}

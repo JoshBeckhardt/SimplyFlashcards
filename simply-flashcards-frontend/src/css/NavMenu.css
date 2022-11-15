@@ -1,0 +1,41 @@
+#nav-menu {
+  display: inline-block;
+
+  height: 100vh;
+
+  background-color: #3A3F58;
+}
+
+.nav-menu-option {
+  padding: 1rem;
+
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+
+  color: white;
+  font-size: 1.5rem;
+}
+
+.nav-menu-option:hover {
+  border-left: 2px solid white;
+
+  background-color: #28283C;
+
+  font-weight: bold;
+}
+
+.nav-menu-option-selected {
+  background-color: black;
+}
+
+.nav-menu-option-selected:hover {
+  border-left: 2px solid white;
+
+  background-color: black;
+
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+}
