@@ -14,6 +14,7 @@ namespace simply_flashcards_backend.BusinessLogic
         {
             this.decksRepository = decksRepository;
         }
+
         public async Task<IEnumerable<Deck>> GetAllDecksAsync()
         {
             return await decksRepository.GetAllDecksAsync();

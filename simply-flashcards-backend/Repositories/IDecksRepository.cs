@@ -4,7 +4,7 @@ namespace simply_flashcards_backend.Repositories
 {
     public interface IDecksRepository
     {
-        public Task<IEnumerable<Deck>> GetAllDecksAsync();
-        public Task<Deck?> GetDeckByDeckIdAsync(Guid deckId);
+        Task<IEnumerable<Deck>> GetAllDecksAsync();
+        Task<Deck?> GetDeckByDeckIdAsync(Guid deckId);
     }
 }

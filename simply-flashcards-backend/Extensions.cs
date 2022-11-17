@@ -15,5 +15,15 @@ namespace simply_flashcards_backend
                 LastModifiedDate = deck.LastModifiedDate
             };
         }
+
+        public static CardDTO ToDTO(this Card card)
+        {
+            return new CardDTO {
+                CardId = card.CardId,
+                DeckId = card.DeckId,
+                Prompt = card.Prompt,
+                Answer = card.Answer
+            };
+        }
     }
 }

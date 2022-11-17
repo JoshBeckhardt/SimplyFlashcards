@@ -28,9 +28,7 @@ const SelectDeck = ({
       className="select-deck"
       style={{ width: `${constants.CONTENT_WIDTH_PERCENT}%` }}
     >
-      <div
-        className="select-deck-panel"
-      >
+      <div className="select-deck-panel">
         {
           loadingDecks ? (
             <div style={{ position: "relative", top: "50%", transform: "translateY(-50%)" }}>

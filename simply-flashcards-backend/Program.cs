@@ -16,9 +16,11 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-builder.Services.AddSingleton<IDecksRepository, MemDecksRepository>();
-
 builder.Services.AddSingleton<IDecksBLL, DecksBLL>();
+builder.Services.AddSingleton<ICardsBLL, CardsBLL>();
+
+builder.Services.AddSingleton<IDecksRepository, MemDecksRepository>();
+builder.Services.AddSingleton<ICardsRepository, MemCardsRepository>();
 
 builder.Services.AddControllers();
 
