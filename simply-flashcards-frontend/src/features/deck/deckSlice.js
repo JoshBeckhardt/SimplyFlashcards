@@ -3,47 +3,15 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 const initialState = {
   decks: [],
   currentDeck: null,
-  loadingDecks: false
+  loadingDecks: false,
+  loadingDecksRejected: false
 };
 
 export const getDecks = createAsyncThunk(
   'deck/getDecks',
   async () => {
-    const response = await (
-      new Promise((resolve) => (
-        setTimeout(() => resolve([
-          {
-            deckId: "d61f8767-81f5-49a7-a511-221ef75e02d8",
-            title: "Basic Multiplication",
-            cardCount: 4,
-            createdDate: "1990-01-01T00:00:00.000Z",
-            lastModifiedDate: "1990-01-01T00:00:00.000Z"
-          },
-          {
-            deckId: "87239f06-c84a-4ac8-b21c-7f43ba3c5dfa",
-            title: "Deck 2",
-            cardCount: 5,
-            createdDate: "1990-01-02T00:00:00.000Z",
-            lastModifiedDate: "1990-01-02T00:00:00.000Z"
-          },
-          {
-            deckId: "0272e732-7428-43eb-999a-dfc54f0a4276",
-            title: "Deck 3",
-            cardCount: 2,
-            createdDate: "1990-01-03T00:00:00.000Z",
-            lastModifiedDate: "1990-01-03T00:00:00.000Z"
-          },
-          {
-            deckId: "97feb584-07a9-47f7-b31f-9de6bfa13ddd",
-            title: "Deck 4",
-            cardCount: 7,
-            createdDate: "1990-01-04T00:00:00.000Z",
-            lastModifiedDate: "1990-01-04T00:00:00.000Z"
-          }
-        ]), 1000)
-      ))
-    );
-    return response;
+    const response = await fetch("https://localhost:7250/decks");
+    return await response.json();
   }
 );
 
@@ -54,15 +22,24 @@ export const deckSlice = createSlice({
     builder
       .addCase(getDecks.pending, (state) => {
         state.loadingDecks = true;
+        state.loadingDecksRejected = false;
+        state.decks = [];
       })
       .addCase(getDecks.fulfilled, (state, action) => {
         state.loadingDecks = false;
+        state.loadingDecksRejected = false;
         state.decks = action.payload;
+      })
+      .addCase(getDecks.rejected, (state) => {
+        state.loadingDecks = false;
+        state.loadingDecksRejected = true;
+        state.decks = [];
       });
   }
 });
 
-export const selectDecks = (state) => state.deck.decks;
 export const selectLoadingDecks = (state) => state.deck.loadingDecks;
+export const selectLoadingDecksRejected = (state) => state.deck.loadingDecksRejected;
+export const selectDecks = (state) => state.deck.decks;
 
 export default deckSlice.reducer;

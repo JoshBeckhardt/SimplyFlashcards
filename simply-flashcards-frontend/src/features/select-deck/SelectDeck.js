@@ -6,7 +6,8 @@ import * as constants from  '../../constants';
 import {
   getDecks,
   selectDecks,
-  selectLoadingDecks
+  selectLoadingDecks,
+  selectLoadingDecksRejected
 } from '../deck/deckSlice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
@@ -15,6 +16,7 @@ const SelectDeck = ({
 }) => {
   const decks = useSelector(selectDecks);
   const loadingDecks = useSelector(selectLoadingDecks);
+  const loadingDecksRejected = useSelector(selectLoadingDecksRejected);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,44 +37,50 @@ const SelectDeck = ({
               <LoadingSpinner />
             </div>
           ) : (
-            <div className="select-deck-table">
-              <div className="select-deck-table-header-row">
-                <div className="select-deck-table-header-cell">
-                  Title
-                </div>
-                <div className="select-deck-table-header-cell">
-                  Number of Cards
-                </div>
-                <div className="select-deck-table-header-cell">
-                  Date Created
-                </div>
-                <div className="select-deck-table-header-cell">
-                  Date Last Modified
-                </div>
+            loadingDecksRejected ? (
+              <div style={{ width: "fit-content", position: "relative", top: "50%", transform: "translateY(-50%)", margin: "auto" }}>
+                Error
               </div>
-              {
-                decks.map((deck) => (
-                  <div
-                    key={deck.deckId}
-                    className="select-deck-list-item"
-                    onClick={() => onSelect(deck.deckId)}
-                  >
-                    <div className="select-deck-list-item-cell">
-                      {deck.title}
-                    </div>
-                    <div className="select-deck-list-item-cell">
-                      {deck.cardCount}
-                    </div>
-                    <div className="select-deck-list-item-cell">
-                      {new Date(deck.createdDate).toLocaleDateString()}
-                    </div>
-                    <div className="select-deck-list-item-cell">
-                      {new Date(deck.lastModifiedDate).toLocaleDateString()}
-                    </div>
+            ) : (
+              <div className="select-deck-table">
+                <div className="select-deck-table-header-row">
+                  <div className="select-deck-table-header-cell">
+                    Title
                   </div>
-                ))
-              }
-            </div>
+                  <div className="select-deck-table-header-cell">
+                    Number of Cards
+                  </div>
+                  <div className="select-deck-table-header-cell">
+                    Date Created
+                  </div>
+                  <div className="select-deck-table-header-cell">
+                    Date Last Modified
+                  </div>
+                </div>
+                {
+                  decks.map((deck) => (
+                    <div
+                      key={deck.deckId}
+                      className="select-deck-list-item"
+                      onClick={() => onSelect(deck.deckId)}
+                    >
+                      <div className="select-deck-list-item-cell">
+                        {deck.title}
+                      </div>
+                      <div className="select-deck-list-item-cell">
+                        {deck.cardCount}
+                      </div>
+                      <div className="select-deck-list-item-cell">
+                        {new Date(deck.createdDate).toLocaleDateString()}
+                      </div>
+                      <div className="select-deck-list-item-cell">
+                        {new Date(deck.lastModifiedDate).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            )
           )
         }
       </div>
