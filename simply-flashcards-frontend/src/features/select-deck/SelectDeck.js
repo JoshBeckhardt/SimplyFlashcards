@@ -60,7 +60,7 @@ const SelectDeck = ({
                     <div
                       key={deck.deckId}
                       className="select-deck-list-item"
-                      onClick={() => onSelect(deck.deckId)}
+                      onClick={() => onSelect(deck)}
                     >
                       <div className="select-deck-list-item-cell">
                         {deck.title}

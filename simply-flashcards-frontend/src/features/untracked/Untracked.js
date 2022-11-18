@@ -25,6 +25,7 @@ const Untracked = () => {
 
   const [onAnswerSide, setOnAnswerSide] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+  const [deckTitle, setDeckTitle] = useState("");
 
   return (
     <>
@@ -58,59 +59,77 @@ const Untracked = () => {
                 id="untracked-mode"
                 style={{ width: `${constants.CONTENT_WIDTH_PERCENT}%` }}
               >
-                <div className="card-parent">
-                  <div
-                    className="arrow"
-                    style={{
-                      color: currentCard === 0 ? constants.DISABLED_COLOR : "white",
-                      cursor: currentCard === 0 ? "auto" : "pointer"
-                    }}
-                    onClick={() => {
-                      if (currentCard > 0) {
-                        setCurrentCard(previousCurrentCard => previousCurrentCard - 1);
-                        setOnAnswerSide(false);
-                      }
-                    }}
-                  >
-                    &#8678;
+                <div className="title-content-wrapper">
+                  <div className="deck-title">
+                    {deckTitle}
                   </div>
-                  <div>
-                    <Card
-                      prompt={currentDeckCards[currentCard].prompt}
-                      answer={currentDeckCards[currentCard].answer}
-                      onAnswerSide={onAnswerSide}
-                      setOnAnswerSide={setOnAnswerSide}
-                    />
-                    <div className="side-indicator">
-                      {
-                        onAnswerSide ? (
-                          "Click card to view prompt"
-                        ) : (
-                          "Click card to view answer"
-                        )
-                      }
+                  <div className="card-parent">
+                    <div
+                      className="arrow"
+                      style={{
+                        color: currentCard === 0 ? constants.DISABLED_COLOR : "white",
+                        cursor: currentCard === 0 ? "auto" : "pointer"
+                      }}
+                      onClick={() => {
+                        if (currentCard > 0) {
+                          setCurrentCard(previousCurrentCard => previousCurrentCard - 1);
+                          setOnAnswerSide(false);
+                        }
+                      }}
+                    >
+                      &#8678;
+                    </div>
+                    <div>
+                      <Card
+                        prompt={currentDeckCards[currentCard].prompt}
+                        answer={currentDeckCards[currentCard].answer}
+                        onAnswerSide={onAnswerSide}
+                        setOnAnswerSide={setOnAnswerSide}
+                      />
+                      <div className="side-indicator">
+                        {
+                          onAnswerSide ? (
+                            "Click card to view prompt"
+                          ) : (
+                            "Click card to view answer"
+                          )
+                        }
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+                        <input
+                          type="button"
+                          value="Select New Deck"
+                          onClick={() => dispatch(chooseDeck(null))}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className="arrow"
+                      style={{
+                        color: currentCard === currentDeckCards.length - 1 ? constants.DISABLED_COLOR : "white",
+                        cursor: currentCard === currentDeckCards.length - 1 ? "auto" : "pointer"
+                      }}
+                      onClick={() => {
+                        if (currentCard < currentDeckCards.length - 1) {
+                          setCurrentCard(previousCurrentCard => previousCurrentCard + 1);
+                          setOnAnswerSide(false);
+                        }
+                      }}
+                    >
+                      &#8680;
                     </div>
                   </div>
-                  <div
-                    className="arrow"
-                    style={{
-                      color: currentCard === currentDeckCards.length - 1 ? constants.DISABLED_COLOR : "white",
-                      cursor: currentCard === currentDeckCards.length - 1 ? "auto" : "pointer"
-                    }}
-                    onClick={() => {
-                      if (currentCard < currentDeckCards.length - 1) {
-                        setCurrentCard(previousCurrentCard => previousCurrentCard + 1);
-                        setOnAnswerSide(false);
-                      }
-                    }}
-                  >
-                    &#8680;
-                  </div>
+                  <div className="flex-balancer"></div>
                 </div>
               </div>
             ) : (
               <SelectDeck
-                onSelect={(deckId) => dispatch(chooseDeck(deckId))}
+                onSelect={(deck) => {
+                  setOnAnswerSide(0);
+                  setCurrentCard(0);
+                  setDeckTitle(deck.title);
+                  dispatch(chooseDeck(deck.deckId));
+                }}
               />
             )
           )

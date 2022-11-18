@@ -10,6 +10,13 @@ const initialState = {
 export const chooseDeck = createAsyncThunk(
   'cards/chooseDeck',
   async (deckId) => {
+    if (deckId === null) {
+      return {
+        deckId: null,
+        cards: []
+      };
+    }
+
     const response = await fetch(`https://localhost:7250/cards/${deckId}`);
     const responseJson = await response.json();
 
