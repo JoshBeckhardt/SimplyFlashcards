@@ -8,9 +8,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy => {
         policy
-            .WithOrigins(
-                "http://localhost:3000"
-            )
+            .WithOrigins(builder.Configuration.GetValue<string>("Origins").Split(','))
             .AllowAnyHeader();
     });
 });

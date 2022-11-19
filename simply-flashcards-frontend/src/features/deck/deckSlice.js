@@ -14,7 +14,7 @@ const initialState = {
 export const getDecks = createAsyncThunk(
   'deck/getDecks',
   async () => {
-    const response = await fetch("https://localhost:7250/decks");
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks`);
     return await response.json();
   }
 );
