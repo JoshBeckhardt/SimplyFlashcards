@@ -71,5 +71,18 @@ namespace simply_flashcards_backend.Repositories
         {
             return await Task.FromResult(cards.Where(card => card.DeckId == deckId));
         }
+
+        public async Task UpdateCardsAsync(IEnumerable<Card> cardsEdited)
+        {
+            cards = cards.Select(c => {
+                Card? newCard = cardsEdited.Where(ce => ce.CardId == c.CardId).FirstOrDefault();
+                if (newCard == null)
+                {
+                    return c;
+                }
+                return newCard;
+            }).ToList();
+            await Task.CompletedTask;
+        }
     }
 }

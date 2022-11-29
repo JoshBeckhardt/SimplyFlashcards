@@ -6,5 +6,6 @@ namespace simply_flashcards_backend.Repositories
     {
         Task<IEnumerable<Card>> GetAllCardsAsync();
         Task<IEnumerable<Card>> GetCardsByDeckIdAsync(Guid deckId);
+        Task UpdateCardsAsync(IEnumerable<Card> cardsEdited);
     }
 }

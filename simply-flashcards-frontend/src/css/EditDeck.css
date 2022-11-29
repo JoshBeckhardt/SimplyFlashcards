@@ -1,0 +1,58 @@
+#edit-deck {
+  display: inline-block;
+
+  height: 100vh;
+  vertical-align: top;
+
+  background-color: lightgrey;
+}
+
+.title-content-wrapper {
+  display: flex;
+
+  height: 100%;
+
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.deck-title {
+  text-align: center;
+  font-size: 4rem;
+}
+
+.card-parent {
+  display: flex;
+
+  height: 50%;
+
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: stretch;
+}
+
+.arrow {
+  align-self: center;
+
+  font-size: 6rem;
+  text-shadow:
+    -.0625rem -.0625rem 0 #000, .0625rem -.0625rem 0 #000, -.0625rem .0625rem 0 #000, .0625rem .0625rem 0 #000;
+
+  user-select: none;
+}
+
+.side-indicator {
+  margin-right: 2px;
+  text-align: right;
+
+  user-select: none;
+}
+
+.submit-button {
+  width: 40vw;
+
+  margin: 0px auto;
+  padding: 1rem;
+
+  font-size: 2rem;
+}

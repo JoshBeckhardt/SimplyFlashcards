@@ -9,6 +9,7 @@ import {
 import * as constants from './constants';
 import NavMenu from './components/NavMenu';
 import Untracked from './features/untracked/Untracked';
+import EditDeck from './features/edit-deck/EditDeck';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
         <Route path={constants.TRAIN} element={<>abc</>} />
         <Route path={constants.UNTRACKED} element={<Untracked />} />
         <Route path={constants.CREATE_DECK} element={<>abc</>} />
-        <Route path={constants.EDIT_DECK} element={<>abc</>} />
+        <Route path={constants.EDIT_DECK} element={<EditDeck />} />
         <Route path={constants.SETTINGS} element={<>abc</>} />
         <Route path={constants.ROOT} element={<Navigate to={constants.UNTRACKED} />} />
       </Routes>

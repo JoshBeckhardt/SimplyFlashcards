@@ -3,28 +3,31 @@ import React from 'react';
 import '../css/Card.css';
 
 const Card = ({
-  prompt,
-  answer,
-  onAnswerSide,
-  setOnAnswerSide
+  currentText,
+  setOnAnswerSide,
+  editMode,
+  onChangeTextArea
 }) => {
-  
-
   return (
     <div
       className="card"
-      onClick={() => {
-        setOnAnswerSide(previousAnswerSide => !previousAnswerSide);
+      onClick={(e) => {
+        if (!editMode || e.target.tagName.toLowerCase() !== "textarea") {
+          setOnAnswerSide(previousAnswerSide => !previousAnswerSide);
+        }
       }}
     >
       <div
-        className="inner"
+        className={editMode ? "inner-edit-mode" : "inner"}
       >
         {
-          onAnswerSide ? (
-            answer
+          editMode ? (
+            <textarea
+              value={currentText}
+              onChange={onChangeTextArea}
+            />
           ) : (
-            prompt
+            currentText
           )
         }
       </div>

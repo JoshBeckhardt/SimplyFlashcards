@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import '../../css/Untracked.css';
+import '../../css/EditDeck.css';
 import '../../css/SelectDeck.css';
 import * as constants from '../../constants';
 import {
   chooseDeck,
+  submitEditedDeck,
   selectCurrentDeckId,
   selectCurrentDeckCards,
   selectLoadingCurrentDeckCards,
@@ -15,17 +17,19 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import Card from '../../components/Card';
 import SelectDeck from '../select-deck/SelectDeck';
 
-const Untracked = () => {
+const EditDeck = () => {
   const currentDeckId = useSelector(selectCurrentDeckId);
   const currentDeckCards = useSelector(selectCurrentDeckCards);
   const loadingCurrentDeckCards = useSelector(selectLoadingCurrentDeckCards);
   const loadingCurrentDeckCardsRejected = useSelector(selectLoadingCurrentDeckCardsRejected);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [onAnswerSide, setOnAnswerSide] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const [deckTitle, setDeckTitle] = useState("");
+  const [editedCards, setEditedCards] = useState(null);
 
   return (
     <>
@@ -56,7 +60,7 @@ const Untracked = () => {
           ) : (
             currentDeckId !== null ? (
               <div
-                id="untracked-mode"
+                id="edit-deck"
                 style={{ width: `${constants.CONTENT_WIDTH_PERCENT}%` }}
               >
                 <div className="title-content-wrapper">
@@ -81,20 +85,33 @@ const Untracked = () => {
                     </div>
                     <div>
                       <Card
-                        currentText={onAnswerSide ? currentDeckCards[currentCard].answer : currentDeckCards[currentCard].prompt}
+                        currentText={(editedCards || currentDeckCards)[currentCard][onAnswerSide ? "answer" : "prompt"]}
                         setOnAnswerSide={setOnAnswerSide}
-                        editMode={false}
+                        editMode={true}
+                        onChangeTextArea={(e) => {
+                          const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
+                          newEditedCards[currentCard][onAnswerSide ? "answer" : "prompt"] = e.target.value;
+                          newEditedCards[currentCard].edited = true;
+                          setEditedCards(newEditedCards);
+                        }}
                       />
-                      <div className="side-indicator">
-                        {
-                          onAnswerSide ? (
-                            "Click card to view prompt"
-                          ) : (
-                            "Click card to view answer"
-                          )
-                        }
-                      </div>
-                      <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                        <input
+                          type="button"
+                          value={`Flip to ${onAnswerSide ? "Prompt" : "Answer"}`}
+                          onClick={() => setOnAnswerSide(previousOnAnswerSide => !previousOnAnswerSide)}
+                        />
+                        <span>
+                          {
+                            `
+                              ${currentCard + 1} (${onAnswerSide ? (
+                                (editedCards || currentDeckCards)[currentCard].answer.length
+                              ) : (
+                                (editedCards || currentDeckCards)[currentCard].prompt.length
+                              )}/140)
+                            `
+                          }
+                        </span>
                         <input
                           type="button"
                           value="Select New Deck"
@@ -105,11 +122,11 @@ const Untracked = () => {
                     <div
                       className="arrow"
                       style={{
-                        color: currentCard === currentDeckCards.length - 1 ? constants.DISABLED_COLOR : "white",
-                        cursor: currentCard === currentDeckCards.length - 1 ? "auto" : "pointer"
+                        color: currentCard === (editedCards || currentDeckCards).length - 1 ? constants.DISABLED_COLOR : "white",
+                        cursor: currentCard === (editedCards || currentDeckCards).length - 1 ? "auto" : "pointer"
                       }}
                       onClick={() => {
-                        if (currentCard < currentDeckCards.length - 1) {
+                        if (currentCard < (editedCards || currentDeckCards).length - 1) {
                           setCurrentCard(previousCurrentCard => previousCurrentCard + 1);
                           setOnAnswerSide(false);
                         }
@@ -118,7 +135,17 @@ const Untracked = () => {
                       &#8680;
                     </div>
                   </div>
-                  <div className="flex-balancer"></div>
+                  <input
+                    className="submit-button"
+                    type="button"
+                    value="Submit Deck"
+                    onClick={() => {
+                      if (Array.isArray(editedCards)) {
+                        dispatch(submitEditedDeck({ deckId: currentDeckId, cards: editedCards }))
+                      }
+                      navigate("/");
+                    }}
+                  />
                 </div>
               </div>
             ) : (
@@ -127,6 +154,7 @@ const Untracked = () => {
                   setOnAnswerSide(0);
                   setCurrentCard(0);
                   setDeckTitle(deck.title);
+                  setEditedCards(null);
                   dispatch(chooseDeck(deck.deckId));
                 }}
               />
@@ -138,4 +166,4 @@ const Untracked = () => {
   );
 };
 
-export default Untracked;
+export default EditDeck;

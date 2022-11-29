@@ -37,4 +37,18 @@ public class CardsController : ControllerBase
 
         return Ok(cards.Select(card => card.ToDTO()));
     }
+
+    [HttpPut]
+    [Route("{deckId}")]
+    public async Task<ActionResult<IEnumerable<CardDTO>>> UpdateDeckAsync(Guid deckId, [FromBody] IEnumerable<CardDTO> cards)
+    {
+        IEnumerable<Card> cardsEdited = cards.Where(c => c.Edited ?? false).Select(c => new Card {
+            CardId = c.CardId,
+            DeckId = c.DeckId,
+            Prompt = c.Prompt,
+            Answer = c.Answer
+        });
+
+        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsEdited)).Select(card => card.ToDTO()));
+    }
 }

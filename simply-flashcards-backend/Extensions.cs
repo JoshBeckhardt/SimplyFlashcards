@@ -22,7 +22,10 @@ namespace simply_flashcards_backend
                 CardId = card.CardId,
                 DeckId = card.DeckId,
                 Prompt = card.Prompt,
-                Answer = card.Answer
+                Answer = card.Answer,
+                Edited = null,
+                Created = null,
+                Deleted = null,
             };
         }
     }
