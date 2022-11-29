@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   currentDeckId: null,
+  currentDeckTitle: "",
   currentDeckCards: [],
   loadingCurrentDeckCards: false,
   loadingCurrentDeckCardsRejected: false
@@ -50,6 +51,11 @@ export const submitEditedDeck = createAsyncThunk(
 export const cardSlice = createSlice({
   name: "cards",
   initialState,
+  reducers: {
+    setDeckTitle: (state, action) => {
+      state.currentDeckTitle = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(chooseDeck.pending, (state) => {
@@ -93,8 +99,11 @@ export const cardSlice = createSlice({
 });
 
 export const selectCurrentDeckId = (state) => state.cards.currentDeckId;
+export const selectCurrentDeckTitle = (state) => state.cards.currentDeckTitle;
 export const selectCurrentDeckCards = (state) => state.cards.currentDeckCards;
 export const selectLoadingCurrentDeckCards = (state) => state.cards.loadingCurrentDeckCards;
 export const selectLoadingCurrentDeckCardsRejected = (state) => state.cards.loadingCurrentDeckCardsRejected;
+
+export const { setDeckTitle } = cardSlice.actions;
 
 export default cardSlice.reducer;

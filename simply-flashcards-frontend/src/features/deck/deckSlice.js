@@ -3,12 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 const initialState = {
   decks: [],
   loadingDecks: false,
-  loadingDecksRejected: false,
-
-  currentDeckId: null,
-  currentDeckCards: [],
-  loadingCurrentDeckCards: false,
-  loadingCurrentDeckCardsRejected: false
+  loadingDecksRejected: false
 };
 
 export const getDecks = createAsyncThunk(

@@ -7,8 +7,10 @@ import '../../css/SelectDeck.css';
 import * as constants from '../../constants';
 import {
   chooseDeck,
+  setDeckTitle,
   submitEditedDeck,
   selectCurrentDeckId,
+  selectCurrentDeckTitle,
   selectCurrentDeckCards,
   selectLoadingCurrentDeckCards,
   selectLoadingCurrentDeckCardsRejected
@@ -19,6 +21,7 @@ import SelectDeck from '../select-deck/SelectDeck';
 
 const EditDeck = () => {
   const currentDeckId = useSelector(selectCurrentDeckId);
+  const currentDeckTitle = useSelector(selectCurrentDeckTitle);
   const currentDeckCards = useSelector(selectCurrentDeckCards);
   const loadingCurrentDeckCards = useSelector(selectLoadingCurrentDeckCards);
   const loadingCurrentDeckCardsRejected = useSelector(selectLoadingCurrentDeckCardsRejected);
@@ -28,7 +31,6 @@ const EditDeck = () => {
 
   const [onAnswerSide, setOnAnswerSide] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
-  const [deckTitle, setDeckTitle] = useState("");
   const [editedCards, setEditedCards] = useState(null);
 
   return (
@@ -65,7 +67,7 @@ const EditDeck = () => {
               >
                 <div className="title-content-wrapper">
                   <div className="deck-title">
-                    {deckTitle}
+                    {currentDeckTitle}
                   </div>
                   <div className="card-parent">
                     <div
@@ -153,7 +155,7 @@ const EditDeck = () => {
                 onSelect={(deck) => {
                   setOnAnswerSide(0);
                   setCurrentCard(0);
-                  setDeckTitle(deck.title);
+                  dispatch(setDeckTitle(deck.title));
                   setEditedCards(null);
                   dispatch(chooseDeck(deck.deckId));
                 }}
