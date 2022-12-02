@@ -18,8 +18,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IDecksBLL, DecksBLL>();
 builder.Services.AddSingleton<ICardsBLL, CardsBLL>();
 
-builder.Services.AddSingleton<IDecksRepository, MemDecksRepository>();
-builder.Services.AddSingleton<ICardsRepository, MemCardsRepository>();
+builder.Services.AddSingleton<IDecksRepository, DecksRepository>();
+builder.Services.AddSingleton<ICardsRepository, CardsRepository>();
 
 builder.Services.AddControllers();
 
