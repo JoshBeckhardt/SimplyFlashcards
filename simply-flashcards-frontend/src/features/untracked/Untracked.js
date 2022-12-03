@@ -84,6 +84,7 @@ const Untracked = () => {
                     <div>
                       <Card
                         currentText={onAnswerSide ? currentDeckCards[currentCard].answer : currentDeckCards[currentCard].prompt}
+                        deleted={false}
                         setOnAnswerSide={setOnAnswerSide}
                         editMode={false}
                       />

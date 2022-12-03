@@ -38,6 +38,16 @@ namespace simply_flashcards_backend.Repositories
             }
         }
 
+        public async Task DeleteCardsAsync(IEnumerable<Guid> cardsDeleted)
+        {
+            string sql = "DELETE FROM cards WHERE \"CardId\" = ANY(@CardsDeleted)";
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.ExecuteAsync(sql, new { CardsDeleted = cardsDeleted.ToList() });
+            }
+        }
+
         public async Task UpdateCardsAsync(IEnumerable<Card> cardsEdited)
         {
             string cardsEditedSerialized = JsonConvert.SerializeObject(cardsEdited);

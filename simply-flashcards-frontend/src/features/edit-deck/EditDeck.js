@@ -88,6 +88,7 @@ const EditDeck = () => {
                     <div>
                       <Card
                         currentText={(editedCards || currentDeckCards)[currentCard][onAnswerSide ? "answer" : "prompt"]}
+                        deleted={(editedCards || currentDeckCards)[currentCard].deleted}
                         setOnAnswerSide={setOnAnswerSide}
                         editMode={true}
                         onChangeTextArea={(e) => {
@@ -103,7 +104,16 @@ const EditDeck = () => {
                           value={`Flip to ${onAnswerSide ? "Prompt" : "Answer"}`}
                           onClick={() => setOnAnswerSide(previousOnAnswerSide => !previousOnAnswerSide)}
                         />
-                        <span>
+                        <input
+                          type="button"
+                          value={(editedCards || currentDeckCards)[currentCard].deleted ? "Keep Card" : "Remove Card"}
+                          onClick={() => {
+                            const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
+                            newEditedCards[currentCard].deleted = !(newEditedCards[currentCard].deleted);
+                            setEditedCards(newEditedCards);
+                          }}
+                        />
+                        <span className="card-index-character-count">
                           {
                             `
                               ${currentCard + 1} (${onAnswerSide ? (
@@ -114,6 +124,20 @@ const EditDeck = () => {
                             `
                           }
                         </span>
+                        <div>
+                          <input
+                            className="add-card"
+                            type="button"
+                            value="Add Card Before Current Card"
+                            onClick={() => console.log("Add Card")}
+                          />
+                          <input
+                            className="add-card"
+                            type="button"
+                            value="Add Card After Current Card"
+                            onClick={() => console.log("Add Card")}
+                          />
+                        </div>
                         <input
                           type="button"
                           value="Select New Deck"

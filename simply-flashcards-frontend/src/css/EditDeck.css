@@ -56,3 +56,13 @@
 
   font-size: 2rem;
 }
+
+.card-index-character-count {
+  font-size: 1.5rem;
+}
+
+.add-card {
+  display: block;
+
+  margin: auto;
+}

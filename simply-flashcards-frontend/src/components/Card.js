@@ -4,6 +4,7 @@ import '../css/Card.css';
 
 const Card = ({
   currentText,
+  deleted,
   setOnAnswerSide,
   editMode,
   onChangeTextArea
@@ -11,6 +12,7 @@ const Card = ({
   return (
     <div
       className="card"
+      style={{ backgroundColor: deleted ? "pink" : "white" }}
       onClick={(e) => {
         if (!editMode || e.target.tagName.toLowerCase() !== "textarea") {
           setOnAnswerSide(previousAnswerSide => !previousAnswerSide);

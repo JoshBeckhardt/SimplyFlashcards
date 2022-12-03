@@ -1,3 +1,4 @@
+using System.Transactions;
 using simply_flashcards_backend.Entities;
 using simply_flashcards_backend.Repositories;
 
@@ -24,10 +25,17 @@ namespace simply_flashcards_backend.BusinessLogic
             return await cardsRepository.GetCardsByDeckIdAsync(deckId);
         }
 
-        public async Task<IEnumerable<Card>> UpdateDeckAsync(Guid deckId, IEnumerable<Card> cardsEdited)
+        public async Task<IEnumerable<Card>> UpdateDeckAsync(Guid deckId, IEnumerable<Guid> cardsDeleted, IEnumerable<Card> cardsEdited)
         {
-            await cardsRepository.UpdateCardsAsync(cardsEdited);
-            return await cardsRepository.GetCardsByDeckIdAsync(deckId);
+            List<Card> updatedCards = new List<Card>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await cardsRepository.DeleteCardsAsync(cardsDeleted);
+                await cardsRepository.UpdateCardsAsync(cardsEdited);
+                updatedCards = (await cardsRepository.GetCardsByDeckIdAsync(deckId)).ToList();
+                scope.Complete();
+            }
+            return updatedCards;
         }
     }
 }

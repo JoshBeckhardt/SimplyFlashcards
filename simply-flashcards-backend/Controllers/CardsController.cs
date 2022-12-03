@@ -42,13 +42,20 @@ public class CardsController : ControllerBase
     [Route("{deckId}")]
     public async Task<ActionResult<IEnumerable<CardDTO>>> UpdateDeckAsync(Guid deckId, [FromBody] IEnumerable<CardDTO> cards)
     {
-        IEnumerable<Card> cardsEdited = cards.Where(c => c.Edited ?? false).Select(c => new Card {
-            CardId = c.CardId,
-            DeckId = c.DeckId,
-            Prompt = c.Prompt,
-            Answer = c.Answer
-        });
+        IEnumerable<Guid> cardsDeleted = cards
+            .Where(c => (c.Deleted ?? false) && c.CardId != Guid.Empty)
+            .Select(c => c.CardId);
 
-        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsEdited)).Select(card => card.ToDTO()));
+        IEnumerable<Card> cardsEdited = cards
+            .Where(c => !(c.Deleted ?? false) && !(c.Created ?? false) && (c.Edited ?? false))
+            .Select(c => new Card {
+                CardId = c.CardId,
+                DeckId = c.DeckId,
+                Prompt = c.Prompt,
+                Answer = c.Answer
+            }
+        );
+
+        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsDeleted, cardsEdited)).Select(card => card.ToDTO()));
     }
 }
