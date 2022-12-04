@@ -1,3 +1,18 @@
+.no-card {
+  display: flex;
+
+  height: 100%;
+  width: 40vw;
+
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  font-size: 3rem;
+  font-weight: lighter;
+}
+
 .card {
   height: 100%;
   width: 40vw;

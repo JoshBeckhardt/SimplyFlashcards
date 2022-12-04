@@ -61,6 +61,12 @@
   font-size: 1.5rem;
 }
 
+.add-card-only {
+  display: block;
+
+  height: 2rem;
+}
+
 .add-card {
   display: block;
 

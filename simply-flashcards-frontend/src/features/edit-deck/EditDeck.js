@@ -73,6 +73,7 @@ const EditDeck = () => {
                     <div
                       className="arrow"
                       style={{
+                        display: (editedCards || currentDeckCards).length ? "block" : "none",
                         color: currentCard === 0 ? constants.DISABLED_COLOR : "white",
                         cursor: currentCard === 0 ? "auto" : "pointer"
                       }}
@@ -86,27 +87,44 @@ const EditDeck = () => {
                       &#8678;
                     </div>
                     <div>
-                      <Card
-                        currentText={(editedCards || currentDeckCards)[currentCard][onAnswerSide ? "answer" : "prompt"]}
-                        deleted={(editedCards || currentDeckCards)[currentCard].deleted}
-                        setOnAnswerSide={setOnAnswerSide}
-                        editMode={true}
-                        onChangeTextArea={(e) => {
-                          const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
-                          newEditedCards[currentCard][onAnswerSide ? "answer" : "prompt"] = e.target.value;
-                          newEditedCards[currentCard].edited = true;
-                          setEditedCards(newEditedCards);
-                        }}
-                      />
+                      {
+                        (editedCards || currentDeckCards).length ? (
+                          <Card
+                            currentText={(editedCards || currentDeckCards)[currentCard][onAnswerSide ? "answer" : "prompt"]}
+                            deleted={(editedCards || currentDeckCards)[currentCard].deleted}
+                            setOnAnswerSide={setOnAnswerSide}
+                            editMode={true}
+                            onChangeTextArea={(e) => {
+                              const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
+                              newEditedCards[currentCard][onAnswerSide ? "answer" : "prompt"] = e.target.value;
+                              newEditedCards[currentCard].edited = true;
+                              setEditedCards(newEditedCards);
+                            }}
+                          />
+                        ) : (
+                          <div className="no-card">
+                            Deck Empty
+                          </div>
+                        )
+                      }
                       <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <input
                           type="button"
                           value={`Flip to ${onAnswerSide ? "Prompt" : "Answer"}`}
+                          disabled={(editedCards || currentDeckCards).length === 0}
                           onClick={() => setOnAnswerSide(previousOnAnswerSide => !previousOnAnswerSide)}
                         />
                         <input
                           type="button"
-                          value={(editedCards || currentDeckCards)[currentCard].deleted ? "Keep Card" : "Remove Card"}
+                          value={
+                            (editedCards || currentDeckCards).length === 0 ||
+                            (editedCards || currentDeckCards)[currentCard].deleted ? (
+                              "Keep Card"
+                            ) : (
+                              "Remove Card"
+                            )
+                          }
+                          disabled={(editedCards || currentDeckCards).length === 0}
                           onClick={() => {
                             const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
                             newEditedCards[currentCard].deleted = !(newEditedCards[currentCard].deleted);
@@ -115,28 +133,45 @@ const EditDeck = () => {
                         />
                         <span className="card-index-character-count">
                           {
-                            `
-                              ${currentCard + 1} (${onAnswerSide ? (
-                                (editedCards || currentDeckCards)[currentCard].answer.length
-                              ) : (
-                                (editedCards || currentDeckCards)[currentCard].prompt.length
-                              )}/140)
-                            `
+                            (editedCards || currentDeckCards).length === 0 ? (
+                              ""
+                            ) : (
+                              `
+                                ${currentCard + 1} (${onAnswerSide ? (
+                                  (editedCards || currentDeckCards)[currentCard].answer.length
+                                ) : (
+                                  (editedCards || currentDeckCards)[currentCard].prompt.length
+                                )}/140)
+                              `
+                            )
                           }
                         </span>
                         <div>
-                          <input
-                            className="add-card"
-                            type="button"
-                            value="Add Card Before Current Card"
-                            onClick={() => console.log("Add Card")}
-                          />
-                          <input
-                            className="add-card"
-                            type="button"
-                            value="Add Card After Current Card"
-                            onClick={() => console.log("Add Card")}
-                          />
+                          {
+                            (editedCards || currentDeckCards).length === 0 ? (
+                              <input
+                                className="add-card-only"
+                                type="button"
+                                value="Add First Card"
+                                onClick={() => console.log("Add Card")}
+                              />
+                            ) : (
+                              <>
+                                <input
+                                  className="add-card"
+                                  type="button"
+                                  value="Add Card Before Current Card"
+                                  onClick={() => console.log("Add Card")}
+                                />
+                                <input
+                                  className="add-card"
+                                  type="button"
+                                  value="Add Card After Current Card"
+                                  onClick={() => console.log("Add Card")}
+                                />
+                              </>
+                            )
+                          }
                         </div>
                         <input
                           type="button"
@@ -148,6 +183,7 @@ const EditDeck = () => {
                     <div
                       className="arrow"
                       style={{
+                        display: (editedCards || currentDeckCards).length ? "block" : "none",
                         color: currentCard === (editedCards || currentDeckCards).length - 1 ? constants.DISABLED_COLOR : "white",
                         cursor: currentCard === (editedCards || currentDeckCards).length - 1 ? "auto" : "pointer"
                       }}
@@ -165,6 +201,7 @@ const EditDeck = () => {
                     className="submit-button"
                     type="button"
                     value="Submit Deck"
+                    disabled={(editedCards || currentDeckCards).length === 0}
                     onClick={() => {
                       if (Array.isArray(editedCards)) {
                         dispatch(submitEditedDeck({ deckId: currentDeckId, cards: editedCards }))

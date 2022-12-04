@@ -30,11 +30,6 @@ public class CardsController : ControllerBase
     {
         IEnumerable<Card> cards = await cardsBLL.GetCardsByDeckIdAsync(deckId);
 
-        if (cards.Count() == 0)
-        {
-            return BadRequest();
-        }
-
         return Ok(cards.Select(card => card.ToDTO()));
     }
 

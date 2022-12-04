@@ -69,6 +69,7 @@ const Untracked = () => {
                     <div
                       className="arrow"
                       style={{
+                        display: currentDeckCards.length ? "block" : "none",
                         color: currentCard === 0 ? constants.DISABLED_COLOR : "white",
                         cursor: currentCard === 0 ? "auto" : "pointer"
                       }}
@@ -82,21 +83,35 @@ const Untracked = () => {
                       &#8678;
                     </div>
                     <div>
-                      <Card
-                        currentText={onAnswerSide ? currentDeckCards[currentCard].answer : currentDeckCards[currentCard].prompt}
-                        deleted={false}
-                        setOnAnswerSide={setOnAnswerSide}
-                        editMode={false}
-                      />
-                      <div className="side-indicator">
-                        {
-                          onAnswerSide ? (
-                            "Click card to view prompt"
-                          ) : (
-                            "Click card to view answer"
-                          )
-                        }
-                      </div>
+                      {
+                        currentDeckCards.length ? (
+                          <Card
+                            currentText={onAnswerSide ? currentDeckCards[currentCard].answer : currentDeckCards[currentCard].prompt}
+                            deleted={false}
+                            setOnAnswerSide={setOnAnswerSide}
+                            editMode={false}
+                          />
+                        ) : (
+                          <div className="no-card">
+                            Deck Empty
+                          </div>
+                        )
+                      }
+                      {
+                        currentDeckCards.length ? (
+                          <div className="side-indicator">
+                            {
+                              onAnswerSide ? (
+                                "Click card to view prompt"
+                              ) : (
+                                "Click card to view answer"
+                              )
+                            }
+                          </div>
+                        ) : (
+                          null
+                        )
+                      }
                       <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
                         <input
                           type="button"
@@ -108,6 +123,7 @@ const Untracked = () => {
                     <div
                       className="arrow"
                       style={{
+                        display: currentDeckCards.length ? "block" : "none",
                         color: currentCard === currentDeckCards.length - 1 ? constants.DISABLED_COLOR : "white",
                         cursor: currentCard === currentDeckCards.length - 1 ? "auto" : "pointer"
                       }}
