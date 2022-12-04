@@ -7,12 +7,15 @@ namespace simply_flashcards_backend.BusinessLogic
     public class CardsBLL : ICardsBLL
     {
         private ICardsRepository cardsRepository;
+        private IDecksRepository decksRepository;
 
         public CardsBLL(
-            ICardsRepository cardsRepository
+            ICardsRepository cardsRepository,
+            IDecksRepository decksRepository
         )
         {
             this.cardsRepository = cardsRepository;
+            this.decksRepository = decksRepository;
         }
 
         public async Task<IEnumerable<Card>> GetAllCardsAsync()
@@ -33,6 +36,7 @@ namespace simply_flashcards_backend.BusinessLogic
                 await cardsRepository.DeleteCardsAsync(cardsDeleted);
                 await cardsRepository.CreateCardsAsync(cardsCreated);
                 await cardsRepository.UpdateCardsAsync(cardsEdited);
+                await decksRepository.UpdateLastModifiedDate(deckId);
                 updatedCards = (await cardsRepository.GetCardsByDeckIdAsync(deckId)).ToList();
                 scope.Complete();
             }
