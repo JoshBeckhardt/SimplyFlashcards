@@ -32,6 +32,7 @@ const EditDeck = () => {
   const [onAnswerSide, setOnAnswerSide] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const [editedCards, setEditedCards] = useState(null);
+  console.log(editedCards);
 
   return (
     <>
@@ -153,7 +154,7 @@ const EditDeck = () => {
                                 className="add-card-only"
                                 type="button"
                                 value="Add First Card"
-                                onClick={() => console.log("Add Card")}
+                                onClick={() => setEditedCards([{ ...(constants.NEW_CARD), deckId: currentDeckId }])}
                               />
                             ) : (
                               <>
@@ -161,13 +162,22 @@ const EditDeck = () => {
                                   className="add-card"
                                   type="button"
                                   value="Add Card Before Current Card"
-                                  onClick={() => console.log("Add Card")}
+                                  onClick={() => {
+                                    const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
+                                    newEditedCards.splice(currentCard, 0, { ...(constants.NEW_CARD), deckId: currentDeckId });
+                                    setEditedCards(newEditedCards);
+                                  }}
                                 />
                                 <input
                                   className="add-card"
                                   type="button"
                                   value="Add Card After Current Card"
-                                  onClick={() => console.log("Add Card")}
+                                  onClick={() => {
+                                    const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
+                                    newEditedCards.splice(currentCard + 1, 0, { ...(constants.NEW_CARD), deckId: currentDeckId });
+                                    setEditedCards(newEditedCards);
+                                    setCurrentCard(previousCurrentCard => previousCurrentCard + 1);
+                                  }}
                                 />
                               </>
                             )

@@ -36,3 +36,15 @@ export const CONTENT_WIDTH_PERCENT = 75;
 export const MAX_CARD_CHARS = 255;
 
 export const DISABLED_COLOR = "#AAAFB4";
+
+export const EMPTY_GUID = "00000000-0000-0000-0000-000000000000";
+
+export const NEW_CARD = {
+  deckId: null, // This is null instead of the empty GUID so that it fails fast if not set.
+  cardId: EMPTY_GUID,
+  prompt: "Prompt",
+  answer: "Answer",
+  edited: false,
+  created: true,
+  deleted: false
+};

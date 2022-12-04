@@ -2,6 +2,7 @@ namespace simply_flashcards_backend.DTOs
 {
     public class CardDTO
     {
+        // Remember to update NEW_CARD in constants.js when changing this class.
         public Guid CardId { get; set; }
         public Guid DeckId { get; set; }
         public string? Prompt { get; set; }

@@ -48,6 +48,44 @@ namespace simply_flashcards_backend.Repositories
             }
         }
 
+        public async Task CreateCardsAsync(IEnumerable<Card> cardsCreated)
+        {
+            string cardsCreatedSerialized = JsonConvert.SerializeObject(cardsCreated);
+            string sql = (
+                @"
+                    WITH
+                        ""UnnestedCardsCreated""
+                        AS
+                        (
+                            SELECT JSONB_ARRAY_ELEMENTS(@CardsCreated::JSONB) AS ""SerializedCard""
+                        ),
+                        ""DeserializedCardsCreated""
+                        AS
+                        (
+                            SELECT
+                                (""SerializedCard""->>'CardId')::UUID AS ""CardId"",
+                                (""SerializedCard""->>'DeckId')::UUID AS ""DeckId"",
+                                (""SerializedCard""->>'Prompt') AS ""Prompt"",
+                                (""SerializedCard""->>'Answer') AS ""Answer""
+                            FROM
+                                ""UnnestedCardsCreated""
+                        )
+                    INSERT INTO
+                        cards
+                        (""CardId"", ""DeckId"", ""Prompt"", ""Answer"")
+                        SELECT
+                            *
+                        FROM
+                            ""DeserializedCardsCreated""
+                "
+            );
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.ExecuteAsync(sql, new { CardsCreated = cardsCreatedSerialized });
+            }
+        }
+
         public async Task UpdateCardsAsync(IEnumerable<Card> cardsEdited)
         {
             string cardsEditedSerialized = JsonConvert.SerializeObject(cardsEdited);

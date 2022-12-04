@@ -35,11 +35,28 @@ public class CardsController : ControllerBase
 
     [HttpPut]
     [Route("{deckId}")]
-    public async Task<ActionResult<IEnumerable<CardDTO>>> UpdateDeckAsync(Guid deckId, [FromBody] IEnumerable<CardDTO> cards)
+    public async Task<ActionResult<IEnumerable<CardDTO>>> UpdateDeckAsync(Guid deckId, [FromBody] List<CardDTO> cards)
     {
+        foreach (CardDTO card in cards)
+        {
+            if (card.CardId == Guid.Empty)
+            {
+                card.CardId = Guid.NewGuid();
+            }
+        }
+
         IEnumerable<Guid> cardsDeleted = cards
             .Where(c => (c.Deleted ?? false) && c.CardId != Guid.Empty)
             .Select(c => c.CardId);
+
+        IEnumerable<Card> cardsCreated = cards
+            .Where(c => !(c.Deleted ?? false) && (c.Created ?? false))
+            .Select(c => new Card {
+                CardId = c.CardId,
+                DeckId = c.DeckId,
+                Prompt = c.Prompt,
+                Answer = c.Answer
+            });
 
         IEnumerable<Card> cardsEdited = cards
             .Where(c => !(c.Deleted ?? false) && !(c.Created ?? false) && (c.Edited ?? false))
@@ -48,9 +65,8 @@ public class CardsController : ControllerBase
                 DeckId = c.DeckId,
                 Prompt = c.Prompt,
                 Answer = c.Answer
-            }
-        );
+            });
 
-        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsDeleted, cardsEdited)).Select(card => card.ToDTO()));
+        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsDeleted, cardsCreated, cardsEdited)).Select(card => card.ToDTO()));
     }
 }
