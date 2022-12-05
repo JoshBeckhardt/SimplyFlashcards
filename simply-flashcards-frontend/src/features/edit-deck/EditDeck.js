@@ -102,6 +102,10 @@ const EditDeck = () => {
                             setOnAnswerSide={setOnAnswerSide}
                             editMode={true}
                             onChangeTextArea={(e) => {
+                              if (e.target.value.length > 140) {
+                                return;
+                              }
+
                               const newEditedCards = JSON.parse(JSON.stringify(editedCards || currentDeckCards));
                               newEditedCards[currentCard][onAnswerSide ? "answer" : "prompt"] = e.target.value;
                               newEditedCards[currentCard].edited = true;

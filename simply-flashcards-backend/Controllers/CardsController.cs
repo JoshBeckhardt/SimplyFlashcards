@@ -39,6 +39,11 @@ public class CardsController : ControllerBase
     {
         foreach (CardDTO card in cards)
         {
+            if ((card.Prompt ?? string.Empty).Length > 140 || (card.Answer ?? string.Empty).Length > 140)
+            {
+                return BadRequest();
+            }
+
             if (card.CardId == Guid.Empty)
             {
                 card.CardId = Guid.NewGuid();

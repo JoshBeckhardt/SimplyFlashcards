@@ -19,6 +19,14 @@ export const chooseDeck = createAsyncThunk(
     }
 
     const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/cards/${deckId}`);
+
+    if (response.status !== 200) {
+      return {
+        deckId: null,
+        cards: null
+      };
+    }
+
     const responseJson = await response.json();
 
     return {
@@ -57,6 +65,14 @@ export const submitEditedDeck = createAsyncThunk(
       },
       body: JSON.stringify(cards)
     });
+
+    if (response.status !== 200) {
+      return {
+        deckId: null,
+        cards: null
+      };
+    }
+
     const responseJson = await response.json();
 
     return {
