@@ -51,6 +51,7 @@ namespace simply_flashcards_backend.Repositories
         public async Task CreateCardsAsync(IEnumerable<Card> cardsCreated)
         {
             string cardsCreatedSerialized = JsonConvert.SerializeObject(cardsCreated);
+
             string sql = (
                 @"
                     WITH

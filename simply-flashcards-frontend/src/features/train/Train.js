@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import '../../css/Untracked.css';
+import '../../css/Train.css';
 import '../../css/SelectDeck.css';
 import * as constants from '../../constants';
 import {
@@ -17,7 +17,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import Card from '../../components/Card';
 import SelectDeck from '../select-deck/SelectDeck';
 
-const Untracked = () => {
+const Train = () => {
   const currentDeckId = useSelector(selectCurrentDeckId);
   const currentDeckTitle = useSelector(selectCurrentDeckTitle);
   const currentDeckCards = useSelector(selectCurrentDeckCards);
@@ -58,7 +58,7 @@ const Untracked = () => {
           ) : (
             currentDeckId !== null ? (
               <div
-                id="untracked-mode"
+                id="train"
                 style={{ width: `${constants.CONTENT_WIDTH_PERCENT}%` }}
               >
                 <div className="title-content-wrapper">
@@ -157,4 +157,4 @@ const Untracked = () => {
   );
 };
 
-export default Untracked;
+export default Train;

@@ -2,8 +2,8 @@
 export const ROOT = "";
 export const LOGIN = "login";
 export const SIGNUP = "signup";
+export const ABOUT = "about";
 export const TRAIN = "train";
-export const UNTRACKED = "untracked";
 export const CREATE_DECK = "createdeck";
 export const EDIT_DECK = "editdeck";
 export const SETTINGS = "settings";
@@ -14,16 +14,16 @@ export const NAV_MENU_OPTIONS = [
     LABEL: "Train"
   },
   {
-    PATHNAME: UNTRACKED,
-    LABEL: "Untracked Mode"
-  },
-  {
     PATHNAME: CREATE_DECK,
     LABEL: "Create Deck"
   },
   {
     PATHNAME: EDIT_DECK,
     LABEL: "Edit Deck"
+  },
+  {
+    PATHNAME: ABOUT,
+    LABEL: "About"
   },
   {
     PATHNAME: SETTINGS,

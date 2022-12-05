@@ -8,7 +8,7 @@ import {
 
 import * as constants from './constants';
 import NavMenu from './components/NavMenu';
-import Untracked from './features/untracked/Untracked';
+import Train from './features/train/Train';
 import EditDeck from './features/edit-deck/EditDeck';
 
 function App() {
@@ -18,12 +18,12 @@ function App() {
       <Routes>
         <Route path={constants.LOGIN} element={<>abc</>} />
         <Route path={constants.SIGNUP} element={<>abc</>} />
-        <Route path={constants.TRAIN} element={<>abc</>} />
-        <Route path={constants.UNTRACKED} element={<Untracked />} />
+        <Route path={constants.TRAIN} element={<Train />} />
         <Route path={constants.CREATE_DECK} element={<>abc</>} />
         <Route path={constants.EDIT_DECK} element={<EditDeck />} />
         <Route path={constants.SETTINGS} element={<>abc</>} />
-        <Route path={constants.ROOT} element={<Navigate to={constants.UNTRACKED} />} />
+        <Route path={constants.ABOUT} element={<>abc</>} />
+        <Route path={constants.ROOT} element={<Navigate to={constants.TRAIN} />} />
       </Routes>
     </BrowserRouter>
   );
