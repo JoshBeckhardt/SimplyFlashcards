@@ -37,17 +37,21 @@ public class CardsController : ControllerBase
     [Route("{deckId}")]
     public async Task<ActionResult<IEnumerable<CardDTO>>> UpdateDeckAsync(Guid deckId, [FromBody] List<CardDTO> cards)
     {
-        foreach (CardDTO card in cards)
+        List<object> order = new List<object>();
+
+        for (int i = 0; i < cards.Count; i++)
         {
-            if ((card.Prompt ?? string.Empty).Length > 140 || (card.Answer ?? string.Empty).Length > 140)
+            if ((cards[i].Prompt ?? string.Empty).Length > 140 || (cards[i].Answer ?? string.Empty).Length > 140)
             {
                 return BadRequest();
             }
 
-            if (card.CardId == Guid.Empty)
+            if (cards[i].CardId == Guid.Empty)
             {
-                card.CardId = Guid.NewGuid();
+                cards[i].CardId = Guid.NewGuid();
             }
+
+            order.Add(new { CardId = cards[i].CardId, Position = i });
         }
 
         IEnumerable<Guid> cardsDeleted = cards
@@ -72,6 +76,6 @@ public class CardsController : ControllerBase
                 Answer = c.Answer
             });
 
-        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsDeleted, cardsCreated, cardsEdited)).Select(card => card.ToDTO()));
+        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsDeleted, cardsCreated, cardsEdited, order)).Select(card => card.ToDTO()));
     }
 }

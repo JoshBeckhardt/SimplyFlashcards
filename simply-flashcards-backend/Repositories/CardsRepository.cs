@@ -30,7 +30,7 @@ namespace simply_flashcards_backend.Repositories
 
         public async Task<IEnumerable<Card>> GetCardsByDeckIdAsync(Guid deckId)
         {
-            string sql = "SELECT * FROM cards WHERE \"DeckId\" = @DeckId";
+            string sql = "SELECT * FROM cards WHERE \"DeckId\" = @DeckId ORDER BY \"Position\" ASC";
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
@@ -123,6 +123,44 @@ namespace simply_flashcards_backend.Repositories
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.ExecuteAsync(sql, new { CardsEdited = cardsEditedSerialized });
+            }
+        }
+
+        public async Task UpdateCardOrder(List<object> order)
+        {
+            string orderSerialized = JsonConvert.SerializeObject(order);
+
+            string sql = (
+                @"
+                    WITH
+                        ""UnnestedOrder""
+                        AS
+                        (
+                            SELECT JSONB_ARRAY_ELEMENTS(@Order::JSONB) AS ""SerializedOrder""
+                        ),
+                        ""DeserializedOrder""
+                        AS
+                        (
+                            SELECT
+                                (""SerializedOrder""->>'CardId')::UUID AS ""CardId"",
+                                (""SerializedOrder""->>'Position')::INTEGER AS ""Position""
+                            FROM
+                                ""UnnestedOrder""
+                        )
+                    UPDATE
+                        cards
+                    SET
+                        ""Position"" = ""DeserializedOrder"".""Position""
+                    FROM
+                        ""DeserializedOrder""
+                    WHERE
+                        cards.""CardId"" = ""DeserializedOrder"".""CardId"";
+                "
+            );
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.ExecuteAsync(sql, new { Order = orderSerialized });
             }
         }
     }

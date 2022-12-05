@@ -28,7 +28,13 @@ namespace simply_flashcards_backend.BusinessLogic
             return await cardsRepository.GetCardsByDeckIdAsync(deckId);
         }
 
-        public async Task<IEnumerable<Card>> UpdateDeckAsync(Guid deckId, IEnumerable<Guid> cardsDeleted, IEnumerable<Card> cardsCreated, IEnumerable<Card> cardsEdited)
+        public async Task<IEnumerable<Card>> UpdateDeckAsync(
+            Guid deckId,
+            IEnumerable<Guid> cardsDeleted,
+            IEnumerable<Card> cardsCreated,
+            IEnumerable<Card> cardsEdited,
+            List<object> order
+        )
         {
             List<Card> updatedCards = new List<Card>();
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -36,6 +42,7 @@ namespace simply_flashcards_backend.BusinessLogic
                 await cardsRepository.DeleteCardsAsync(cardsDeleted);
                 await cardsRepository.CreateCardsAsync(cardsCreated);
                 await cardsRepository.UpdateCardsAsync(cardsEdited);
+                await cardsRepository.UpdateCardOrder(order);
                 await decksRepository.UpdateLastModifiedDate(deckId);
                 updatedCards = (await cardsRepository.GetCardsByDeckIdAsync(deckId)).ToList();
                 scope.Complete();
