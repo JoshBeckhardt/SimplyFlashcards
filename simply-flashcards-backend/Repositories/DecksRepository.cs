@@ -78,5 +78,25 @@ namespace simply_flashcards_backend.Repositories
                 await connection.ExecuteAsync(sql, new { DeckId = deckId });
             }
         }
+
+        public async Task EditDeck(Deck deck)
+        {
+            string sql = (
+                @"
+                    UPDATE
+                        decks
+                    SET
+                        ""Title"" = @Title,
+                        ""LastModifiedDate"" = now()
+                    WHERE
+                        ""DeckId"" = @DeckId
+                "
+            );
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.ExecuteAsync(sql, new { DeckId = deck.DeckId, Title = deck.Title });
+            }
+        }
     }
 }

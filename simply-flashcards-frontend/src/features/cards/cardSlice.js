@@ -22,9 +22,27 @@ export const chooseDeck = createAsyncThunk(
     const responseJson = await response.json();
 
     return {
-      deckId: deckId,
+      deckId,
       cards: responseJson
     };
+  }
+);
+
+export const submitEditedDeckTitle = createAsyncThunk(
+  'deck/submitEditedDeckTitle',
+  async (data) => {
+    const { deckId, deckTitle } = data;
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks/${deckId}`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        deckId,
+        title: deckTitle
+      })
+    });
+    return await response.json();
   }
 );
 
@@ -42,7 +60,7 @@ export const submitEditedDeck = createAsyncThunk(
     const responseJson = await response.json();
 
     return {
-      deckId: deckId,
+      deckId,
       cards: responseJson
     };
   }
@@ -94,7 +112,11 @@ export const cardSlice = createSlice({
         state.loadingCurrentDeckCardsRejected = true;
         state.currentDeckId = null;
         state.currentDeckCards = [];
-      });
+      })
+
+      .addCase(submitEditedDeckTitle.fulfilled, (state, action) => {
+        state.currentDeckTitle = action.payload.title;
+      })
   }
 });
 

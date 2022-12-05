@@ -17,6 +17,8 @@
   height: 100%;
   width: 40vw;
 
+  margin: auto;
+
   background-color: white;
   border-radius: 1rem;
   border: .125rem solid black;

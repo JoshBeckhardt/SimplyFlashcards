@@ -7,5 +7,6 @@ namespace simply_flashcards_backend.Repositories
         Task<IEnumerable<Deck>> GetAllDecksAsync();
         Task<Deck?> GetDeckByDeckIdAsync(Guid deckId);
         Task UpdateLastModifiedDate(Guid deckId);
+        Task EditDeck(Deck deck);
     }
 }

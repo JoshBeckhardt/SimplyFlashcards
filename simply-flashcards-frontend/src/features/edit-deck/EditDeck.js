@@ -9,6 +9,7 @@ import {
   chooseDeck,
   setDeckTitle,
   submitEditedDeck,
+  submitEditedDeckTitle,
   selectCurrentDeckId,
   selectCurrentDeckTitle,
   selectCurrentDeckCards,
@@ -32,7 +33,7 @@ const EditDeck = () => {
   const [onAnswerSide, setOnAnswerSide] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
   const [editedCards, setEditedCards] = useState(null);
-  console.log(editedCards);
+  const [editedTitle, setEditedTitle] = useState(null);
 
   return (
     <>
@@ -68,7 +69,12 @@ const EditDeck = () => {
               >
                 <div className="title-content-wrapper">
                   <div className="deck-title">
-                    {currentDeckTitle}
+                    <input
+                      style={{ width: "50%" }}
+                      type="text"
+                      value={(editedTitle === null ? currentDeckTitle : editedTitle)}
+                      onChange={(e) => setEditedTitle(e.target.value)}
+                    />
                   </div>
                   <div className="card-parent">
                     <div
@@ -214,7 +220,10 @@ const EditDeck = () => {
                     disabled={(editedCards || currentDeckCards).length === 0}
                     onClick={() => {
                       if (Array.isArray(editedCards)) {
-                        dispatch(submitEditedDeck({ deckId: currentDeckId, cards: editedCards }))
+                        dispatch(submitEditedDeck({ deckId: currentDeckId, cards: editedCards }));
+                      }
+                      if (editedTitle) {
+                        dispatch(submitEditedDeckTitle({ deckId: currentDeckId, deckTitle: editedTitle }));
                       }
                       navigate("/");
                     }}

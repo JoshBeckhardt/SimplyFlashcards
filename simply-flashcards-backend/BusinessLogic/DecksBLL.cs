@@ -24,5 +24,11 @@ namespace simply_flashcards_backend.BusinessLogic
         {
             return await decksRepository.GetDeckByDeckIdAsync(deckId);
         }
+
+        public async Task<Deck?> EditDeck(Deck deck)
+        {
+            await decksRepository.EditDeck(deck);
+            return await decksRepository.GetDeckByDeckIdAsync(deck.DeckId);
+        }
     }
 }

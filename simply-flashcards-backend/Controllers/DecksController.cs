@@ -37,4 +37,26 @@ public class DecksController : ControllerBase
 
         return deck.ToDTO() ?? new DeckDTO();
     }
+
+    [HttpPut]
+    [Route("{deckId}")]
+    public async Task<ActionResult<DeckDTO>> EditDeck(Guid deckId, [FromBody] DeckDTO deck)
+    {
+        if (deckId != deck.DeckId)
+        {
+            return BadRequest();
+        }
+
+        Deck? updatedDeck = await decksBLL.EditDeck(new Deck {
+            DeckId = deck.DeckId,
+            Title = deck.Title
+        });
+
+        if (deck == null)
+        {
+            return StatusCode(500);
+        }
+
+        return Ok((updatedDeck ?? new Deck()).ToDTO());
+    }
 }
