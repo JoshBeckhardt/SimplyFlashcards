@@ -82,6 +82,15 @@ export const submitEditedDeck = createAsyncThunk(
   }
 );
 
+export const deleteDeck = createAsyncThunk(
+  'deck/deleteDeck',
+  async (deckId) => {
+    await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks/${deckId}`, {
+      method: 'DELETE'
+    });
+  }
+);
+
 export const cardSlice = createSlice({
   name: "cards",
   initialState,
@@ -133,6 +142,21 @@ export const cardSlice = createSlice({
       .addCase(submitEditedDeckTitle.fulfilled, (state, action) => {
         state.currentDeckTitle = action.payload.title;
       })
+
+      .addCase(deleteDeck.pending, (state) => {
+        state.loadingCurrentDeckCards = true;
+        state.loadingCurrentDeckCardsRejected = false;
+      })
+      .addCase(deleteDeck.fulfilled, (state) => {
+        state.loadingCurrentDeckCards = false;
+        state.loadingCurrentDeckCardsRejected = false;
+        state.currentDeckId = null;
+        state.currentDeckCards = [];
+      })
+      .addCase(deleteDeck.rejected, (state) => {
+        state.loadingCurrentDeckCards = false;
+        state.loadingCurrentDeckCardsRejected = true;
+      });
   }
 });
 

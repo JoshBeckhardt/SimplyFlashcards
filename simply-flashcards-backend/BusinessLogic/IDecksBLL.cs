@@ -6,6 +6,7 @@ namespace simply_flashcards_backend.BusinessLogic
     {
         Task<IEnumerable<Deck>> GetAllDecksAsync();
         Task<Deck?> GetDeckByDeckIdAsync(Guid deckId);
-        Task<Deck?> EditDeck(Deck deck);
+        Task<Deck?> EditDeckAsync(Deck deck);
+        Task DeleteDeckAsync(Guid deckId);
     }
 }

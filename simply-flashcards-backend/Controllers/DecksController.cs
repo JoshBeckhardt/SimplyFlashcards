@@ -40,14 +40,14 @@ public class DecksController : ControllerBase
 
     [HttpPut]
     [Route("{deckId}")]
-    public async Task<ActionResult<DeckDTO>> EditDeck(Guid deckId, [FromBody] DeckDTO deck)
+    public async Task<ActionResult<DeckDTO>> EditDeckAsync(Guid deckId, [FromBody] DeckDTO deck)
     {
         if (deckId != deck.DeckId)
         {
             return BadRequest();
         }
 
-        Deck? updatedDeck = await decksBLL.EditDeck(new Deck {
+        Deck? updatedDeck = await decksBLL.EditDeckAsync(new Deck {
             DeckId = deck.DeckId,
             Title = deck.Title
         });
@@ -58,5 +58,13 @@ public class DecksController : ControllerBase
         }
 
         return Ok((updatedDeck ?? new Deck()).ToDTO());
+    }
+
+    [HttpDelete]
+    [Route("{deckId}")]
+    public async Task<ActionResult> DeleteDeckAsync(Guid deckId)
+    {
+        await decksBLL.DeleteDeckAsync(deckId);
+        return StatusCode(204);
     }
 }

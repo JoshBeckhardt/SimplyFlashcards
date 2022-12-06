@@ -1,0 +1,73 @@
+.delete-deck {
+  display: inline-block;
+
+  height: 100vh;
+  vertical-align: top;
+
+  background-color: lightgrey;
+}
+
+.delete-deck-prompt-outer {
+  display: flex;
+
+  height: 100%;
+
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-deck-prompt-inner {
+  width: 40vw;
+  height: fit-content;
+
+  padding: 2rem;
+
+  background-color: white;
+  border-radius: 1rem;
+  border: .125rem solid black;
+  box-shadow: .5rem -.5rem 1rem #AAA;
+}
+
+.prompt-wrapper {
+  padding: 1rem 0rem 2rem;
+}
+
+span {
+  font-size: 2rem;
+}
+
+.deck-title-span {
+  font-style: italic;
+}
+
+.delete-deck-buttons-outer {
+  display: flex;
+
+  flex-direction: row;
+  justify-content: right;
+}
+
+.delete-deck-buttons {
+  width: fit-content;
+  height: 2rem;
+
+  margin: 0.5rem;
+}
+
+#delete-deck-confirm-button {
+  background-color: red;
+  color: white;
+}
+
+#delete-deck-confirm-button:hover {
+  background-color: maroon;
+  color: white;
+}
+
+#delete-deck-confirm-button:active {
+  background-color: maroon;
+  color: white;
+
+  font-weight: bold;
+}

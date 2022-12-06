@@ -9,6 +9,7 @@ namespace simply_flashcards_backend.Repositories
         Task DeleteCardsAsync(IEnumerable<Guid> cardsDeleted);
         Task CreateCardsAsync(IEnumerable<Card> cardsCreated);
         Task UpdateCardsAsync(IEnumerable<Card> cardsEdited);
-        Task UpdateCardOrder(List<object> order);
+        Task UpdateCardOrderAsync(List<object> order);
+        Task DeleteCardsByDeckIdAsync(Guid deckId);
     }
 }

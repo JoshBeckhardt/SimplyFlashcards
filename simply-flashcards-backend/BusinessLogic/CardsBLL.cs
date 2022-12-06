@@ -42,8 +42,8 @@ namespace simply_flashcards_backend.BusinessLogic
                 await cardsRepository.DeleteCardsAsync(cardsDeleted);
                 await cardsRepository.CreateCardsAsync(cardsCreated);
                 await cardsRepository.UpdateCardsAsync(cardsEdited);
-                await cardsRepository.UpdateCardOrder(order);
-                await decksRepository.UpdateLastModifiedDate(deckId);
+                await cardsRepository.UpdateCardOrderAsync(order);
+                await decksRepository.UpdateLastModifiedDateAsync(deckId);
                 updatedCards = (await cardsRepository.GetCardsByDeckIdAsync(deckId)).ToList();
                 scope.Complete();
             }

@@ -6,6 +6,7 @@ export const ABOUT = "about";
 export const TRAIN = "train";
 export const CREATE_DECK = "createdeck";
 export const EDIT_DECK = "editdeck";
+export const DELETE_DECK = "deletedeck";
 export const SETTINGS = "settings";
 
 export const NAV_MENU_OPTIONS = [
@@ -20,6 +21,10 @@ export const NAV_MENU_OPTIONS = [
   {
     PATHNAME: EDIT_DECK,
     LABEL: "Edit Deck"
+  },
+  {
+    PATHNAME: DELETE_DECK,
+    LABEL: "Delete Deck"
   },
   {
     PATHNAME: ABOUT,

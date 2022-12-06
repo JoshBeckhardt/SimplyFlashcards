@@ -69,7 +69,7 @@ namespace simply_flashcards_backend.Repositories
             }
         }
 
-        public async Task UpdateLastModifiedDate(Guid deckId)
+        public async Task UpdateLastModifiedDateAsync(Guid deckId)
         {
             string sql = "UPDATE decks SET \"LastModifiedDate\" = now() WHERE \"DeckId\" = @DeckId";
 
@@ -79,7 +79,7 @@ namespace simply_flashcards_backend.Repositories
             }
         }
 
-        public async Task EditDeck(Deck deck)
+        public async Task EditDeckAsync(Deck deck)
         {
             string sql = (
                 @"
@@ -96,6 +96,16 @@ namespace simply_flashcards_backend.Repositories
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.ExecuteAsync(sql, new { DeckId = deck.DeckId, Title = deck.Title });
+            }
+        }
+
+        public async Task DeleteDeckAsync(Guid deckId)
+        {
+            string sql = "DELETE FROM decks WHERE \"DeckId\" = @DeckId";
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.ExecuteAsync(sql, new { DeckId = deckId });
             }
         }
     }

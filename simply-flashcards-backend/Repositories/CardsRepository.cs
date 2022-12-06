@@ -127,7 +127,7 @@ namespace simply_flashcards_backend.Repositories
             }
         }
 
-        public async Task UpdateCardOrder(List<object> order)
+        public async Task UpdateCardOrderAsync(List<object> order)
         {
             string orderSerialized = JsonConvert.SerializeObject(order);
 
@@ -162,6 +162,16 @@ namespace simply_flashcards_backend.Repositories
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.ExecuteAsync(sql, new { Order = orderSerialized });
+            }
+        }
+
+        public async Task DeleteCardsByDeckIdAsync(Guid deckId)
+        {
+            string sql = "DELETE FROM cards WHERE \"DeckId\" = @DeckId";
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.ExecuteAsync(sql, new { DeckId = deckId });
             }
         }
     }
