@@ -8,5 +8,6 @@ namespace simply_flashcards_backend.BusinessLogic
         Task<Deck?> GetDeckByDeckIdAsync(Guid deckId);
         Task<Deck?> EditDeckAsync(Deck deck);
         Task DeleteDeckAsync(Guid deckId);
+        Task<object> CreateDeckAsync(string title, List<Card> cards);
     }
 }

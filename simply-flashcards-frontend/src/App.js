@@ -11,6 +11,7 @@ import NavMenu from './components/NavMenu';
 import Train from './features/train/Train';
 import EditDeck from './features/edit-deck/EditDeck';
 import DeleteDeck from './features/delete-deck/DeleteDeck';
+import CreateDeck from './features/create-deck/CreateDeck';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
         <Route path={constants.LOGIN} element={<>abc</>} />
         <Route path={constants.SIGNUP} element={<>abc</>} />
         <Route path={constants.TRAIN} element={<Train />} />
-        <Route path={constants.CREATE_DECK} element={<>abc</>} />
+        <Route path={constants.CREATE_DECK} element={<CreateDeck />} />
         <Route path={constants.EDIT_DECK} element={<EditDeck />} />
         <Route path={constants.DELETE_DECK} element={<DeleteDeck />} />
         <Route path={constants.SETTINGS} element={<>abc</>} />

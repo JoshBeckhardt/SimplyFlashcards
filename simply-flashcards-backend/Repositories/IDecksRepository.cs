@@ -9,5 +9,6 @@ namespace simply_flashcards_backend.Repositories
         Task UpdateLastModifiedDateAsync(Guid deckId);
         Task EditDeckAsync(Deck deck);
         Task DeleteDeckAsync(Guid deckId);
+        Task CreateDeckAsync(string title, Guid deckId);
     }
 }

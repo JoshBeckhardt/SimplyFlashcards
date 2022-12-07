@@ -73,7 +73,12 @@ namespace simply_flashcards_backend.Repositories
                         )
                     INSERT INTO
                         cards
-                        (""CardId"", ""DeckId"", ""Prompt"", ""Answer"")
+                        (
+                            ""CardId"",
+                            ""DeckId"",
+                            ""Prompt"",
+                            ""Answer""
+                        )
                         SELECT
                             *
                         FROM

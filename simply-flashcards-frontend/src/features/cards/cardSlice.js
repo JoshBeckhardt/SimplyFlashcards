@@ -91,6 +91,28 @@ export const deleteDeck = createAsyncThunk(
   }
 );
 
+export const submitNewDeck = createAsyncThunk(
+  'deck/submitNewDeck',
+  async (data) => {
+    const { title, cards } = data;
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks?title=${encodeURIComponent(title)}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(cards)
+    });
+
+    const responseJson = await response.json();
+
+    return {
+      deckId: responseJson.deckId,
+      cards: responseJson.cards,
+      title
+    };
+  }
+);
+
 export const cardSlice = createSlice({
   name: "cards",
   initialState,
@@ -131,6 +153,7 @@ export const cardSlice = createSlice({
         state.loadingCurrentDeckCardsRejected = false;
         state.currentDeckId = action.payload.deckId;
         state.currentDeckCards = action.payload.cards;
+        state.currentDeckTitle = action.payload.title;
       })
       .addCase(submitEditedDeck.rejected, (state) => {
         state.loadingCurrentDeckCards = false;
@@ -156,6 +179,26 @@ export const cardSlice = createSlice({
       .addCase(deleteDeck.rejected, (state) => {
         state.loadingCurrentDeckCards = false;
         state.loadingCurrentDeckCardsRejected = true;
+      })
+
+      .addCase(submitNewDeck.pending, (state) => {
+        state.loadingCurrentDeckCards = true;
+        state.loadingCurrentDeckCardsRejected = false;
+        state.currentDeckId = null;
+        state.currentDeckCards = [];
+      })
+      .addCase(submitNewDeck.fulfilled, (state, action) => {
+        state.loadingCurrentDeckCards = false;
+        state.loadingCurrentDeckCardsRejected = false;
+        state.currentDeckId = action.payload.deckId;
+        state.currentDeckCards = action.payload.cards;
+        state.currentDeckTitle = action.payload.title;
+      })
+      .addCase(submitNewDeck.rejected, (state) => {
+        state.loadingCurrentDeckCards = false;
+        state.loadingCurrentDeckCardsRejected = true;
+        state.currentDeckId = null;
+        state.currentDeckCards = [];
       });
   }
 });

@@ -67,4 +67,26 @@ public class DecksController : ControllerBase
         await decksBLL.DeleteDeckAsync(deckId);
         return StatusCode(204);
     }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateDeckAsync([FromBody] IEnumerable<CardDTO> requestCards)
+    {
+        string? title = HttpContext.Request.Query.ContainsKey("title") ? (
+                HttpContext.Request.Query["title"]
+            ) : (
+                ""
+            );
+
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            return BadRequest();
+        }
+
+        return Created("", await decksBLL.CreateDeckAsync(title, requestCards.Where(c => !(c.Deleted ?? false)).Select(c => new Card {
+            DeckId = Guid.Empty,
+            CardId = Guid.Empty,
+            Prompt = c.Prompt,
+            Answer = c.Answer
+        }).ToList()));
+    }
 }

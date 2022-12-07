@@ -44,5 +44,33 @@ namespace simply_flashcards_backend.BusinessLogic
                 scope.Complete();
             }
         }
+
+        public async Task<object> CreateDeckAsync(string title, List<Card> cards)
+        {
+            Guid deckId = Guid.NewGuid();
+
+            List<object> order = new List<object>();
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                cards[i].DeckId = deckId;
+                cards[i].CardId = Guid.NewGuid();
+
+                order.Add(new { CardId = cards[i].CardId, Position = i });
+            }
+
+            List<Card> responseCards = new List<Card>();
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await decksRepository.CreateDeckAsync(title, deckId);
+                await cardsRepository.CreateCardsAsync(cards);
+                await cardsRepository.UpdateCardOrderAsync(order);
+                responseCards = (await cardsRepository.GetCardsByDeckIdAsync(deckId)).ToList();
+                scope.Complete();
+            }
+
+            return new { DeckId = deckId, Cards = responseCards };
+        }
     }
 }
