@@ -153,7 +153,6 @@ export const cardSlice = createSlice({
         state.loadingCurrentDeckCardsRejected = false;
         state.currentDeckId = action.payload.deckId;
         state.currentDeckCards = action.payload.cards;
-        state.currentDeckTitle = action.payload.title;
       })
       .addCase(submitEditedDeck.rejected, (state) => {
         state.loadingCurrentDeckCards = false;
