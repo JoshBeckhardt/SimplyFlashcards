@@ -28,6 +28,16 @@ const Train = () => {
 
   const [onAnswerSide, setOnAnswerSide] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+  const [arrangedCards, setArrangedCards] = useState(null);
+
+  const shuffleCards = () => {
+    const currentCardsShallowCopy = [ ...currentDeckCards ];
+    const newArrangedCards = [];
+    while (currentCardsShallowCopy.length) {
+      newArrangedCards.push(currentCardsShallowCopy.splice(Math.floor(Math.random() * currentCardsShallowCopy.length), 1)[0]);
+    }
+    setArrangedCards(newArrangedCards);
+  };
 
   return (
     <>
@@ -86,7 +96,13 @@ const Train = () => {
                       {
                         currentDeckCards.length ? (
                           <Card
-                            currentText={onAnswerSide ? currentDeckCards[currentCard].answer : currentDeckCards[currentCard].prompt}
+                            currentText={
+                              onAnswerSide ? (
+                                (arrangedCards || currentDeckCards)[currentCard].answer
+                              ) : (
+                                (arrangedCards || currentDeckCards)[currentCard].prompt
+                              )
+                            }
                             deleted={false}
                             setOnAnswerSide={setOnAnswerSide}
                             editMode={false}
@@ -113,11 +129,21 @@ const Train = () => {
                         )
                       }
                       <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
-                        <input
-                          type="button"
-                          value="Select New Deck"
-                          onClick={() => dispatch(chooseDeck(null))}
-                        />
+                        <div>
+                          <input
+                            className="train-button"
+                            type="button"
+                            value="Shuffle Deck"
+                            disabled={!(currentDeckCards && currentDeckCards.length)}
+                            onClick={shuffleCards}
+                          />
+                          <input
+                            className="train-button"
+                            type="button"
+                            value="Select New Deck"
+                            onClick={() => dispatch(chooseDeck(null))}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div
@@ -145,6 +171,7 @@ const Train = () => {
                 onSelect={(deck) => {
                   setOnAnswerSide(0);
                   setCurrentCard(0);
+                  setArrangedCards(null);
                   dispatch(setDeckTitle(deck.title));
                   dispatch(chooseDeck(deck.deckId));
                 }}

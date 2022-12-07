@@ -48,6 +48,12 @@
   user-select: none;
 }
 
+.train-button {
+  display: block;
+
+  margin: 0 0 0 auto;
+}
+
 .flex-balancer {
   height: 4rem;
 }
