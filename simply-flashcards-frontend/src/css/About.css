@@ -1,0 +1,44 @@
+.about {
+  display: inline-block;
+
+  height: 100vh;
+  vertical-align: top;
+
+  background-color: lightgrey;
+}
+
+.main-div {
+  display: flex;
+
+  width: 70%;
+  height: 100vh;
+  vertical-align: top;
+
+  margin: auto;
+
+  flex-direction: column;
+  justify-content: flex-start;
+
+  background-color: white;
+  border-left: .125rem solid black;
+  border-right: .125rem solid black;
+  box-shadow: .5rem -.5rem 1rem #AAA;
+}
+
+.about-title {
+  width: 100%;
+  text-align: center;
+
+  padding-top: 8%;
+  padding-bottom: 4%;
+
+  font-size: 3rem;
+}
+
+.about-section {
+  padding: 1rem 2rem;
+}
+
+.about-link {
+  text-decoration: underline;
+}

@@ -8,6 +8,7 @@ import {
 
 import * as constants from './constants';
 import NavMenu from './components/NavMenu';
+import About from './features/about/About';
 import Train from './features/train/Train';
 import EditDeck from './features/edit-deck/EditDeck';
 import DeleteDeck from './features/delete-deck/DeleteDeck';
@@ -25,7 +26,7 @@ function App() {
         <Route path={constants.EDIT_DECK} element={<EditDeck />} />
         <Route path={constants.DELETE_DECK} element={<DeleteDeck />} />
         <Route path={constants.SETTINGS} element={<>abc</>} />
-        <Route path={constants.ABOUT} element={<>abc</>} />
+        <Route path={constants.ABOUT} element={<About />} />
         <Route path={constants.ROOT} element={<Navigate to={constants.TRAIN} />} />
       </Routes>
     </BrowserRouter>

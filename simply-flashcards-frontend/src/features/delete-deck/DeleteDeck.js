@@ -35,8 +35,8 @@ const DeleteDeck = () => {
       <div className="delete-deck-prompt-outer">
         <div className="delete-deck-prompt-inner">
           <div className="prompt-wrapper">
-            <span>
-              Are you sure you want to delete <span className="deck-title-span">{currentDeckTitle}</span> and all of its cards? Deleted decks cannot be restored.
+            <span className="delete-deck-span">
+              Are you sure you want to delete <span className="delete-deck-span deck-title-span">{currentDeckTitle}</span> and all of its cards? Deleted decks cannot be restored.
             </span>
           </div>
           <div className="delete-deck-buttons-outer">
