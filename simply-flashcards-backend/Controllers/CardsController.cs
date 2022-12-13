@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using simply_flashcards_backend.DTOs;
 using simply_flashcards_backend.Entities;
 using simply_flashcards_backend.BusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace simply_flashcards_backend.Controllers;
 
 [ApiController]
 [Route("cards")]
+[Authorize]
 public class CardsController : ControllerBase
 {
     private ICardsBLL cardsBLL;
@@ -41,7 +43,7 @@ public class CardsController : ControllerBase
 
         for (int i = 0; i < cards.Count; i++)
         {
-            if ((cards[i].Prompt ?? string.Empty).Length > 140 || (cards[i].Answer ?? string.Empty).Length > 140)
+            if ((cards[i].Prompt ?? "").Length > 140 || (cards[i].Answer ?? "").Length > 140)
             {
                 return BadRequest();
             }

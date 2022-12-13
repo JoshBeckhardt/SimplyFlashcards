@@ -7,5 +7,6 @@ namespace simply_flashcards_backend.Entities
         public int? CardCount { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public string? OwnerUsername { get; set; }
     }
 }

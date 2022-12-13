@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { clearAuthentication, selectJwt } from '../auth/authSlice';
 
 const initialState = {
   currentDeckId: null,
@@ -10,7 +11,7 @@ const initialState = {
 
 export const chooseDeck = createAsyncThunk(
   'cards/chooseDeck',
-  async (deckId) => {
+  async (deckId, thunkApi) => {
     if (deckId === null) {
       return {
         deckId: null,
@@ -18,9 +19,21 @@ export const chooseDeck = createAsyncThunk(
       };
     }
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/cards/${deckId}`);
+    const jwt = selectJwt(thunkApi.getState());
+
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/cards/${deckId}`, {
+        headers: {
+          "Authorization": `Bearer ${jwt}`
+        }
+      }
+    );
 
     if (response.status !== 200) {
+      if (response.status === 401) {
+        thunkApi.dispatch(clearAuthentication());
+      }
+
       return {
         deckId: null,
         cards: null
@@ -38,35 +51,52 @@ export const chooseDeck = createAsyncThunk(
 
 export const submitEditedDeckTitle = createAsyncThunk(
   'deck/submitEditedDeckTitle',
-  async (data) => {
+  async (data, thunkApi) => {
     const { deckId, deckTitle } = data;
+
+    const jwt = selectJwt(thunkApi.getState());
+
     const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks/${deckId}`, {
       method: 'PUT',
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${jwt}`
       },
       body: JSON.stringify({
         deckId,
         title: deckTitle
       })
     });
+
+    if (response.status === 401) {
+      thunkApi.dispatch(clearAuthentication());
+    }
+
     return await response.json();
   }
 );
 
 export const submitEditedDeck = createAsyncThunk(
   'cards/submitEditedDeck',
-  async (data) => {
+  async (data, thunkApi) => {
     const { deckId, cards } = data;
+
+    const jwt = selectJwt(thunkApi.getState());
+
     const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/cards/${deckId}`, {
       method: 'PUT',
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${jwt}`
       },
       body: JSON.stringify(cards)
     });
 
     if (response.status !== 200) {
+      if (response.status === 401) {
+        thunkApi.dispatch(clearAuthentication());
+      }
+
       return {
         deckId: null,
         cards: null
@@ -84,24 +114,41 @@ export const submitEditedDeck = createAsyncThunk(
 
 export const deleteDeck = createAsyncThunk(
   'deck/deleteDeck',
-  async (deckId) => {
-    await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks/${deckId}`, {
-      method: 'DELETE'
+  async (deckId, thunkApi) => {
+    const jwt = selectJwt(thunkApi.getState());
+
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks/${deckId}`, {
+      method: 'DELETE',
+      headers: {
+        "Authorization": `Bearer ${jwt}`
+      }
     });
+
+    if (response.status === 401) {
+      thunkApi.dispatch(clearAuthentication());
+    }
   }
 );
 
 export const submitNewDeck = createAsyncThunk(
   'deck/submitNewDeck',
-  async (data) => {
+  async (data, thunkApi) => {
     const { title, cards } = data;
+
+    const jwt = selectJwt(thunkApi.getState());
+
     const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks?title=${encodeURIComponent(title)}`, {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${jwt}`
       },
       body: JSON.stringify(cards)
     });
+
+    if (response.status === 401) {
+      thunkApi.dispatch(clearAuthentication());
+    }
 
     const responseJson = await response.json();
 

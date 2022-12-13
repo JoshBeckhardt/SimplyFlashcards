@@ -55,5 +55,6 @@
 }
 
 .flex-balancer {
+  width: 1px;
   height: 4rem;
 }

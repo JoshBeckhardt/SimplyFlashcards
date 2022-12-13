@@ -17,7 +17,7 @@ namespace simply_flashcards_backend.Repositories
             _connectionString = configuration.GetConnectionString("sfcdatabase");
         }
 
-        public async Task<IEnumerable<Deck>> GetAllDecksAsync()
+        public async Task<IEnumerable<Deck>> GetAllVisibleDecksAsync(string? ownerUsername)
         {
             string sql = (
                 @"
@@ -33,12 +33,15 @@ namespace simply_flashcards_backend.Repositories
                         ) AS ""CardCount""
                     FROM
                         decks
+                    WHERE
+                        decks.""OwnerUsername"" = @OwnerUsername OR
+                        decks.""OwnerUsername"" = 'default'
                 "
             );
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                return await connection.QueryAsync<Deck>(sql);
+                return await connection.QueryAsync<Deck>(sql, new { OwnerUsername = ownerUsername });
             }
         }
 
@@ -109,7 +112,7 @@ namespace simply_flashcards_backend.Repositories
             }
         }
 
-        public async Task CreateDeckAsync(string title, Guid deckId)
+        public async Task CreateDeckAsync(string? ownerUsername, string title, Guid deckId)
         {
             string sql = (
                 @"
@@ -119,21 +122,23 @@ namespace simply_flashcards_backend.Repositories
                             ""DeckId"",
                             ""Title"",
                             ""CreatedDate"",
-                            ""LastModifiedDate""
+                            ""LastModifiedDate"",
+                            ""OwnerUsername""
                         )
                     VALUES
                         (
                             @DeckId,
                             @Title,
                             now(),
-                            now()
+                            now(),
+                            @OwnerUsername
                         )
                 "
             );
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                await connection.ExecuteAsync(sql, new { Title = title, DeckId = deckId });
+                await connection.ExecuteAsync(sql, new { OwnerUsername = ownerUsername, Title = title, DeckId = deckId });
             }
         }
     }

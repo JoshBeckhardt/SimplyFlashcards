@@ -6,14 +6,17 @@ namespace simply_flashcards_backend.BusinessLogic
 {
     public class CardsBLL : ICardsBLL
     {
+        private HttpContextAccessor? httpContextAccessor;
         private ICardsRepository cardsRepository;
         private IDecksRepository decksRepository;
 
         public CardsBLL(
+            IHttpContextAccessor httpContextAccessor,
             ICardsRepository cardsRepository,
             IDecksRepository decksRepository
         )
         {
+            this.httpContextAccessor = (HttpContextAccessor?) httpContextAccessor;
             this.cardsRepository = cardsRepository;
             this.decksRepository = decksRepository;
         }
@@ -25,6 +28,16 @@ namespace simply_flashcards_backend.BusinessLogic
 
         public async Task<IEnumerable<Card>> GetCardsByDeckIdAsync(Guid deckId)
         {
+            string? ownerUsername = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+            Deck? deck = await decksRepository.GetDeckByDeckIdAsync(deckId);
+            if (string.IsNullOrEmpty(ownerUsername))
+            {
+                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Internal Server Error", 500);
+            }
+            if (deck == null || deck?.OwnerUsername != ownerUsername)
+            {
+                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Unauthorized", 401);
+            }
             return await cardsRepository.GetCardsByDeckIdAsync(deckId);
         }
 
@@ -36,9 +49,19 @@ namespace simply_flashcards_backend.BusinessLogic
             List<object> order
         )
         {
+            string? ownerUsername = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
             List<Card> updatedCards = new List<Card>();
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
+                Deck? deck = await decksRepository.GetDeckByDeckIdAsync(deckId);
+                if (string.IsNullOrEmpty(ownerUsername))
+                {
+                    throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Internal Server Error", 500);
+                }
+                if (deck == null || deck?.OwnerUsername != ownerUsername)
+                {
+                    throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Unauthorized", 401);
+                }
                 await cardsRepository.DeleteCardsAsync(cardsDeleted);
                 await cardsRepository.CreateCardsAsync(cardsCreated);
                 await cardsRepository.UpdateCardsAsync(cardsEdited);

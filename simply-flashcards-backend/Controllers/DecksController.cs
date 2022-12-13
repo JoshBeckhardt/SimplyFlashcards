@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using simply_flashcards_backend.DTOs;
 using simply_flashcards_backend.Entities;
 using simply_flashcards_backend.BusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace simply_flashcards_backend.Controllers;
 
 [ApiController]
 [Route("decks")]
+[Authorize]
 public class DecksController : ControllerBase
 {
     private IDecksBLL decksBLL;
@@ -19,9 +21,9 @@ public class DecksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<DeckDTO>> GetAllDecksAsync()
+    public async Task<IEnumerable<DeckDTO>> GetAllVisibleDecksAsync()
     {
-        return (await decksBLL.GetAllDecksAsync()).Select(deck => deck.ToDTO());
+        return (await decksBLL.GetAllVisibleDecksAsync()).Select(deck => deck.ToDTO());
     }
 
     [HttpGet]
@@ -65,7 +67,7 @@ public class DecksController : ControllerBase
     public async Task<ActionResult> DeleteDeckAsync(Guid deckId)
     {
         await decksBLL.DeleteDeckAsync(deckId);
-        return StatusCode(204);
+        return Ok();
     }
 
     [HttpPost]

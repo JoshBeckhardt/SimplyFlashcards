@@ -1,15 +1,26 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import '../css/NavMenu.css';
 import * as constants from '../constants';
 import * as helpers from '../helpers';
+import { selectIsAuthenticated } from '../features/auth/authSlice';
 
 const NavMenuOption = ({
   label,
   isCurrentlySelected
 }) => {
+  const navigate = useNavigate();
+
   const classes = ["nav-menu-option"].concat(isCurrentlySelected ? ["nav-menu-option-selected"] : []);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
     <div className={classes.join(" ")}>

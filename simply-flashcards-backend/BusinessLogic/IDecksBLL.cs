@@ -4,7 +4,7 @@ namespace simply_flashcards_backend.BusinessLogic
 {
     public interface IDecksBLL
     {
-        Task<IEnumerable<Deck>> GetAllDecksAsync();
+        Task<IEnumerable<Deck>> GetAllVisibleDecksAsync();
         Task<Deck?> GetDeckByDeckIdAsync(Guid deckId);
         Task<Deck?> EditDeckAsync(Deck deck);
         Task DeleteDeckAsync(Guid deckId);

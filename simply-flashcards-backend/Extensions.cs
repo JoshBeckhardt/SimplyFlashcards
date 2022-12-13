@@ -12,7 +12,8 @@ namespace simply_flashcards_backend
                 Title = deck.Title,
                 CardCount = deck.CardCount,
                 CreatedDate = deck.CreatedDate,
-                LastModifiedDate = deck.LastModifiedDate
+                LastModifiedDate = deck.LastModifiedDate,
+                OwnerUsername = deck.OwnerUsername
             };
         }
 

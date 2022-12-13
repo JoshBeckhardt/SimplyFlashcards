@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using simply_flashcards_backend.BusinessLogic;
 using simply_flashcards_backend.Repositories;
 
@@ -17,15 +19,32 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddSingleton<IDecksBLL, DecksBLL>();
 builder.Services.AddSingleton<ICardsBLL, CardsBLL>();
+builder.Services.AddSingleton<IUsersBLL, UsersBLL>();
 
 builder.Services.AddSingleton<IDecksRepository, DecksRepository>();
 builder.Services.AddSingleton<ICardsRepository, CardsRepository>();
+builder.Services.AddSingleton<IUsersRepository, UsersRepository>();
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => {
+        options.TokenValidationParameters = new TokenValidationParameters() {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                builder.Configuration.GetValue<string>("JwtSecretKey")
+            )),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 var app = builder.Build();
 
@@ -38,6 +57,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

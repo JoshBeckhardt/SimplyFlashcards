@@ -70,3 +70,21 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.select-deck-no-decks {
+  display: flex;
+
+  height: 100%;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.select-deck-no-decks:only-child {
+  text-align: center;
+  font-size: 3rem;
+}

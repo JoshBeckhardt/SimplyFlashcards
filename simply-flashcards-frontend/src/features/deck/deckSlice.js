@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { clearAuthentication, selectJwt } from '../auth/authSlice';
 
 const initialState = {
   decks: [],
@@ -8,8 +9,19 @@ const initialState = {
 
 export const getDecks = createAsyncThunk(
   'deck/getDecks',
-  async () => {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks`);
+  async (data, thunkApi) => {
+    const jwt = selectJwt(thunkApi.getState());
+
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_HOSTNAME}/decks`, {
+      headers: {
+        "Authorization": `Bearer ${jwt}`
+      }
+    });
+
+    if (response.status === 401) {
+      thunkApi.dispatch(clearAuthentication());
+    }
+
     return await response.json();
   }
 );
