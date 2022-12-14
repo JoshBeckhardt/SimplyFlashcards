@@ -1,2 +1,4 @@
+execute-sql-prod.sh
+next-sql-script-prod.txt
+
 next-sql-script.txt
-role-pass.txt
