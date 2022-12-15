@@ -38,7 +38,7 @@ namespace simply_flashcards_backend.BusinessLogic
             return await decksRepository.GetDeckByDeckIdAsync(deck.DeckId);
         }
 
-        public async Task DeleteDeckAsync(Guid deckId)
+        public async Task<int> DeleteDeckAsync(Guid deckId)
         {
             string? ownerUsername = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -46,16 +46,18 @@ namespace simply_flashcards_backend.BusinessLogic
                 Deck? deck = await decksRepository.GetDeckByDeckIdAsync(deckId);
                 if (string.IsNullOrEmpty(ownerUsername))
                 {
-                    throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Internal Server Error", 500);
+                    return 500;
                 }
                 if (deck == null || deck?.OwnerUsername != ownerUsername)
                 {
-                    throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Unauthorized", 401);
+                    return 401;
                 }
                 await cardsRepository.DeleteCardsByDeckIdAsync(deckId);
                 await decksRepository.DeleteDeckAsync(deckId);
                 scope.Complete();
             }
+
+            return 200;
         }
 
         public async Task<object> CreateDeckAsync(string title, List<Card> cards)

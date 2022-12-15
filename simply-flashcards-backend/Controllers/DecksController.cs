@@ -66,8 +66,8 @@ public class DecksController : ControllerBase
     [Route("{deckId}")]
     public async Task<ActionResult> DeleteDeckAsync(Guid deckId)
     {
-        await decksBLL.DeleteDeckAsync(deckId);
-        return Ok();
+        int httpStatusCode = await decksBLL.DeleteDeckAsync(deckId);
+        return StatusCode(httpStatusCode);
     }
 
     [HttpPost]

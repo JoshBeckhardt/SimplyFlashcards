@@ -32,6 +32,12 @@ public class CardsController : ControllerBase
     {
         IEnumerable<Card> cards = await cardsBLL.GetCardsByDeckIdAsync(deckId);
 
+        Card? firstCard = cards.FirstOrDefault();
+        if (firstCard != null && firstCard.CardId == Guid.Empty)
+        {
+            return StatusCode(Int32.Parse(((firstCard.Prompt) ?? " 500").Substring(1)));
+        }
+
         return Ok(cards.Select(card => card.ToDTO()));
     }
 
@@ -78,6 +84,14 @@ public class CardsController : ControllerBase
                 Answer = c.Answer
             });
 
-        return Ok((await cardsBLL.UpdateDeckAsync(deckId, cardsDeleted, cardsCreated, cardsEdited, order)).Select(card => card.ToDTO()));
+        List<Card> deck = (await cardsBLL.UpdateDeckAsync(deckId, cardsDeleted, cardsCreated, cardsEdited, order)).ToList();
+        Card? firstCard = deck.FirstOrDefault();
+
+        if (firstCard != null && firstCard.CardId == Guid.Empty)
+        {
+            return StatusCode(Int32.Parse(((firstCard.Prompt) ?? " 500").Substring(1)));
+        }
+
+        return Ok((deck).Select(card => card.ToDTO()));
     }
 }

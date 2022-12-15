@@ -27,6 +27,12 @@ public class UsersController : ControllerBase
         }
 
         JwtDTO newUser = await usersBLL.RegisterAsync(user.Username, user.Password);
+
+        if (newUser.Username == "default")
+        {
+            return StatusCode(Int32.Parse(((newUser.Jwt) ?? " 400").Substring(1)));
+        }
+
         return Ok(newUser);
     }
 
@@ -40,6 +46,12 @@ public class UsersController : ControllerBase
         }
 
         string jwt = await usersBLL.LoginAsync(user.Username, user.Password);
+
+        if (jwt[0] == ' ')
+        {
+            return StatusCode(Int32.Parse(jwt.Substring(1)));
+        }
+
         return Ok(new JwtDTO() {
             Username = user.Username,
             Jwt = jwt

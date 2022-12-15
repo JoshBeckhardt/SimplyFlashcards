@@ -32,11 +32,25 @@ namespace simply_flashcards_backend.BusinessLogic
             Deck? deck = await decksRepository.GetDeckByDeckIdAsync(deckId);
             if (string.IsNullOrEmpty(ownerUsername))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Internal Server Error", 500);
+                return new List<Card>() {
+                        new Card() {
+                            CardId = Guid.Empty,
+                            DeckId = Guid.Empty,
+                            Prompt = " 500",
+                            Answer = " 500"
+                        }
+                    };
             }
             if (deck == null || deck?.OwnerUsername != ownerUsername)
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Unauthorized", 401);
+                return new List<Card>() {
+                        new Card() {
+                            CardId = Guid.Empty,
+                            DeckId = Guid.Empty,
+                            Prompt = " 401",
+                            Answer = " 401"
+                        }
+                    };
             }
             return await cardsRepository.GetCardsByDeckIdAsync(deckId);
         }
@@ -56,11 +70,25 @@ namespace simply_flashcards_backend.BusinessLogic
                 Deck? deck = await decksRepository.GetDeckByDeckIdAsync(deckId);
                 if (string.IsNullOrEmpty(ownerUsername))
                 {
-                    throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Internal Server Error", 500);
+                    return new List<Card>() {
+                        new Card() {
+                            CardId = Guid.Empty,
+                            DeckId = Guid.Empty,
+                            Prompt = " 500",
+                            Answer = " 500"
+                        }
+                    };
                 }
                 if (deck == null || deck?.OwnerUsername != ownerUsername)
                 {
-                    throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Unauthorized", 401);
+                    return new List<Card>() {
+                        new Card() {
+                            CardId = Guid.Empty,
+                            DeckId = Guid.Empty,
+                            Prompt = " 401",
+                            Answer = " 401"
+                        }
+                    };
                 }
                 await cardsRepository.DeleteCardsAsync(cardsDeleted);
                 await cardsRepository.CreateCardsAsync(cardsCreated);

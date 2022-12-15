@@ -59,23 +59,35 @@ namespace simply_flashcards_backend.BusinessLogic
         {
             if (string.IsNullOrEmpty(username))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Empty Username", 400);
+                return new JwtDTO() {
+                    Username = "default",
+                    Jwt = " 400"
+                };
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Empty Password", 400);
+                return new JwtDTO() {
+                    Username = "default",
+                    Jwt = " 400"
+                };
             }
 
             if (((username) ?? "").Any(c => Char.IsWhiteSpace(c)))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Whitespace in Username", 400);
+                return new JwtDTO() {
+                    Username = "default",
+                    Jwt = " 400"
+                };
             }
 
             User userWithUsername = await usersRepository.GetUserByUsernameAsync(username ?? "");
             if (userWithUsername != null)
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Username Taken", 409);
+                return new JwtDTO() {
+                    Username = "default",
+                    Jwt = " 409"
+                };
             }
 
             GenerateHashAndSalt(password ?? "", out byte[] passwordHash, out byte[] passwordSalt);
@@ -98,24 +110,24 @@ namespace simply_flashcards_backend.BusinessLogic
         {
             if (string.IsNullOrEmpty(username))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Empty Username", 400);
+                return " 400";
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Empty Password", 400);
+                return " 400";
             }
 
             User user = await usersRepository.GetUserByUsernameAsync(username ?? "");
 
             if (user == null)
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("User Does Not Exist", 401);
+                return " 401";
             }
 
             if (!IsCorrectPassword(user, (password) ?? ""))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Wrong Password", 401);
+                return " 401";
             }
 
             return GenerateJwt(user);
