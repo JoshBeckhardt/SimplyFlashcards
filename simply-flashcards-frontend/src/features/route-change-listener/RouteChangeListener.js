@@ -4,18 +4,23 @@ import { useLocation } from 'react-router-dom';
 
 import * as constants from '../../constants';
 import {
-  clearAuthentication,
-  selectIsAuthenticated
+  clearAuthentication
 } from '../auth/authSlice';
+import {
+  clearDecks
+} from '../deck/deckSlice';
+import {
+  clearCards
+} from '../cards/cardSlice';
 
 const RouteChangeListener = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-
   useEffect(() => {
     if (location.pathname === `/${constants.LOGIN}` || location.pathname === `/${constants.SIGNUP}`) {
+      dispatch(clearCards());
+      dispatch(clearDecks());
       dispatch(clearAuthentication());
     }
   }, [location]);

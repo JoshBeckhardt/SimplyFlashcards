@@ -29,6 +29,13 @@ export const getDecks = createAsyncThunk(
 export const deckSlice = createSlice({
   name: "deck",
   initialState,
+  reducers: {
+    clearDecks: (state) => {
+      state.decks = [];
+      state.loadingDecks = false;
+      state.loadingDecksRejected = false;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getDecks.pending, (state) => {
@@ -52,5 +59,7 @@ export const deckSlice = createSlice({
 export const selectDecks = (state) => state.deck.decks;
 export const selectLoadingDecks = (state) => state.deck.loadingDecks;
 export const selectLoadingDecksRejected = (state) => state.deck.loadingDecksRejected;
+
+export const { clearDecks } = deckSlice.actions;
 
 export default deckSlice.reducer;

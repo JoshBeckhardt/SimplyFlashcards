@@ -166,6 +166,13 @@ export const cardSlice = createSlice({
   reducers: {
     setDeckTitle: (state, action) => {
       state.currentDeckTitle = action.payload;
+    },
+    clearCards: (state) => {
+      state.currentDeckId = null;
+      state.currentDeckTitle = "";
+      state.currentDeckCards = [];
+      state.loadingCurrentDeckCards = false;
+      state.loadingCurrentDeckCardsRejected = false;
     }
   },
   extraReducers: (builder) => {
@@ -255,6 +262,6 @@ export const selectCurrentDeckCards = (state) => state.cards.currentDeckCards;
 export const selectLoadingCurrentDeckCards = (state) => state.cards.loadingCurrentDeckCards;
 export const selectLoadingCurrentDeckCardsRejected = (state) => state.cards.loadingCurrentDeckCardsRejected;
 
-export const { setDeckTitle } = cardSlice.actions;
+export const { setDeckTitle, clearCards } = cardSlice.actions;
 
 export default cardSlice.reducer;
